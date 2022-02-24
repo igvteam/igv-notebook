@@ -1,0 +1,6 @@
+include igv_notebook/*
+recursive-include igv_notebook *.js
+recursive-include igv_notebook *.css
+recursive-include igv_notebook *.png
+recursive-include igv_notebook *.svg
+recursive-include igv_notebook *.map
