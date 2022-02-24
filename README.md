@@ -26,11 +26,7 @@ python setup.py build
 pip install -e .
 ```
 
-#### If you need a clean start, this is python after all
-```bash
-conda deactivate
-conda env remove -n igv_notebook
-```
+
 
 
 
