@@ -3,7 +3,7 @@
 [![Binder](https://beta.mybinder.org/badge.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?filepath=examples)
 =======
 
-igv-notebook is an module which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.  
+igv-notebook is a package which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.  
 
 
 ### Development
