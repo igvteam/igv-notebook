@@ -44,7 +44,16 @@
                                 break
 
                             case "loadTrack":
-                                await browser.loadTrack(data)
+
+                                const config = Object.assign({}, data)
+                                config.url = convertPath(data.url || data.path)
+                                if (data.indexURL) {
+                                    config.indexURL = convertPath(data.indexURL)
+                                } else {
+                                    config.indexed = false
+                                }
+                                await browser.loadTrack(config)
+
                                 break
 
                             case "search":
@@ -79,6 +88,17 @@
         }
     }
 
+    function convertPath(path) {
+        if (!path) {
+            return path
+        } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("data:")) {
+            return path
+        } else {
+            return new igv.NotebookLocalFile({path: path})
+        }
+
+    }
+
     class Queue {
         constructor() {
             this.elements = []
@@ -105,8 +125,29 @@
         }
     }
 
-    window.IGVMessageHandler = new MessageHandler()
+    let counter = 0
 
-    console.log("IGVMessageHandler installed")
+    function uniqueID() {
+        return `${Math.random()}-${counter++}`
+    }
+
+    console.log('registering comm')
+
+    const comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
+
+    const pendingRequests = new Map()
+
+    // Register a handler
+    comm.on_msg(function (msg) {
+        console.log(msg)
+        const id = msg.content.data.id
+        const data = msg.content.data.data
+        pendingRequests.set(id, data)
+    })
+
+
+    window.igv.MessageHandler = new MessageHandler()
+
+    console.log("igv.MessageHandler installed")
 
 })()

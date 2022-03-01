@@ -3,19 +3,53 @@ import random
 import os.path
 
 from IPython.display import HTML, Javascript, display
+from .file_reader import register_filecomm
 
 def init():
+
+    register_filecomm()
 
     igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.min.js')
     igv_file = open(igv_filepath, 'r')
     igv_js = igv_file.read()
     display(Javascript(igv_js))
 
+    #http://localhost:63342/igv.js/dev
+    #<script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.min.js"></script>
+    # igvjs = """
+    # const link = document.createElement("script")
+    # link.src = "http://localhost:63342/igv.js/dist/igv.js"
+    # document.getElementsByTagName("head")[0].appendChild(link)
+    # """
+    # display(Javascript(igvjs))
+
     message_filepath = os.path.join(os.path.dirname(__file__), 'js/messageHandler.js')
     file = open(message_filepath, 'r')
     message_js = file.read()
     display(Javascript(message_js))
 
+    nb_filepath = os.path.join(os.path.dirname(__file__), 'js/localNotebookFile.js')
+    nbfile = open(nb_filepath, 'r')
+    nb_js = nbfile.read()
+    display(Javascript(nb_js))
+
+    comm_filepath = os.path.join(os.path.dirname(__file__), 'js/comm.js')
+    file = open(comm_filepath, 'r')
+    comm_js = file.read()
+    display(Javascript(comm_js))
+
+def ping_frontend() :
+
+    from ipykernel.comm import Comm
+
+    # Use comm to send a message from the kernel
+    my_comm = Comm(target_name='my_comm_target', data={'foo': 1})
+    my_comm.send({'foo': 2})
+
+    # Add a callback for received messages.
+    @my_comm.on_msg
+    def _recv(msg):
+        print(msg['content']['data'])
 
 class Browser(object):
 
@@ -102,7 +136,7 @@ class Browser(object):
 
 
     def _send(self, msg):
-        javascript = """window.IGVMessageHandler.on(%s)""" % (json.dumps(msg))
+        javascript = """window.igv.MessageHandler.on(%s)""" % (json.dumps(msg))
         # print(javascript)
         display(Javascript(javascript))
 
