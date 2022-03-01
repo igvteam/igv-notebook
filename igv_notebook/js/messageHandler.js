@@ -94,7 +94,7 @@
         } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("data:")) {
             return path
         } else {
-            return new igv.createNotebookLocalFile({path: path})
+            return igv.createNotebookLocalFile({path: path})
         }
 
     }

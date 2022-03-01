@@ -11,25 +11,29 @@
 
 (function () {
 
-    let counter = 0
 
-    function uniqueID() {
-        return `${Math.random()}-${counter++}`
+    igv.createNotebookLocalFile = function (options) {
+
+        if (isColab()) {
+            return new ColabLocalFile(options)
+        } else {
+            return new NotebookLocalFile(options)
+        }
     }
 
-    console.log('registering comm')
 
-    const comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
-
+    let comm
     const pendingRequests = new Map()
-
-    // Register a handler
-    comm.on_msg(function (msg) {
-        console.log(msg)
-        const id = msg.content.data.id
-        const data = msg.content.data.data
-        pendingRequests.set(id, data)
-    })
+    if (!isColab()) {
+        console.log('registering comm')
+        comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
+        // Register a handler
+        comm.on_msg(function (msg) {
+            const id = msg.content.data.id
+            const data = msg.content.data.data
+            pendingRequests.set(id, data)
+        })
+    }
 
     /**
      * Emuulates a browser "File"
@@ -64,16 +68,17 @@
             const id = uniqueID()
             const path = this.path
             const promise = new Promise((resolve) => {
-                let count = 0;
+                let count = 0
+
                 function poll() {
 
-                    if(count > 50) {
+                    if (count > 50) {
                         alert(`error reading ${path}: timed out`)
                         console.error(`error reading ${path}: timed out`)
                         resolve(undefined)
                     }
 
-                    count++;
+                    count++
                     if (pendingRequests.has(id)) {
                         const data = pendingRequests.get(id)
                         console.log(`data: ${data}`)
@@ -154,9 +159,8 @@
             const data = await google.colab.kernel.invokeFunction(
                 'ReadFile', // The callback name.
                 args, // The arguments.
-                {}); // kwargs
+                {}) // kwargs
             //const text = result.data['application/json'];
-            document.querySelector("#output-area").appendChild(document.createTextNode(data));
 
             return data
         }
@@ -176,13 +180,13 @@
     }
 
 
-    igv.createNotebookLocalFile = function(options) {
+    function isColab() {
+        return window.google && window.google.colab
+    }
 
-        if(window.google && window.google.colab) {
-            return new ColabLocalFile(options)
-        } else {
-            return new NotebookLocalFile(options)
-        }
+    let counter = 0
+    function uniqueID() {
+        return `${Math.random()}-${counter++}`
     }
 
 })()
