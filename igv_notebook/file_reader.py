@@ -23,7 +23,7 @@ def register_filecomm():
 
     if IN_COLAB:
 
-        def callback(path, start, end):
+        def callback(path, start=None, end=None):
             binary_file_data = read_file(path, start, end)
             return binary_file_data
 

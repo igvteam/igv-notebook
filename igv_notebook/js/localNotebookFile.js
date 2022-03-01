@@ -114,7 +114,70 @@
         }
     }
 
+    /**
+     * Emulates a browser "File" for Colab environments
+     */
+    class ColabLocalFile {
+
+        constructor({path, name, start, end}) {
+            this.path = path
+            this.name = name || path
+            this.start = start
+            this.end = end
+        }
+
+        /**
+         * Returns a new Blob object containing the data in the specified range of bytes of the blob on which it's called.
+         * @param start An index into the Blob indicating the first byte to include in the new Blob
+         * @param end  An index into the Blob indicating the first byte that will *not* be included in the new Blob
+         * @param contentType
+         * @returns {*}
+         */
+        slice(start, end) {
+            return new ColabLocalFile({path: this.path, name: this.name, start, end})
+        }
+
+        /**
+         * Returns a promise that resolves with an ArrayBuffer containing the entire contents of the Blob as binary data.
+         *
+         * @returns {Promise<*>}
+         */
+        async arrayBuffer() {
+
+            const id = uniqueID()
+            const path = this.path
+
+            const args = (this.start === undefined) ?
+                [this.path] :
+                [this.path, this.start.toString(), this.end.toString()]
+
+            const data = await google.colab.kernel.invokeFunction(
+                'ReadFile', // The callback name.
+                args, // The arguments.
+                {}); // kwargs
+            //const text = result.data['application/json'];
+            document.querySelector("#output-area").appendChild(document.createTextNode(data));
+
+            return data
+        }
+
+        /**
+         * Returns a promise that resolves with a USVString containing the entire contents of the Blob interpreted as UTF-8 text.
+         *
+         * @returns {Promise<string>}
+         */
+        async text() {
+            throw Error("text not implemented")
+        }
+
+        stream() {
+            throw Error("stream not implemented")
+        }
+    }
+
+
     igv.createNotebookLocalFile = function(options) {
+
         return new NotebookLocalFile(options)
     }
 
