@@ -82,7 +82,6 @@
                     count++
                     if (pendingRequests.has(id)) {
                         const data = pendingRequests.get(id)
-                        console.log(`data: ${data}`)
                         const dataString = atob(data)
                         const bytes = new Uint8Array(dataString.length)
                         for (var i = 0; i < dataString.length; i++) {
