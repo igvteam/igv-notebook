@@ -33,24 +33,6 @@ def init():
     nb_js = nbfile.read()
     display(Javascript(nb_js))
 
-    comm_filepath = os.path.join(os.path.dirname(__file__), 'js/comm.js')
-    file = open(comm_filepath, 'r')
-    comm_js = file.read()
-    display(Javascript(comm_js))
-
-def ping_frontend() :
-
-    from ipykernel.comm import Comm
-
-    # Use comm to send a message from the kernel
-    my_comm = Comm(target_name='my_comm_target', data={'foo': 1})
-    my_comm.send({'foo': 2})
-
-    # Add a callback for received messages.
-    @my_comm.on_msg
-    def _recv(msg):
-        print(msg['content']['data'])
-
 class Browser(object):
 
     # Always remember the *self* argument

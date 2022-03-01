@@ -114,6 +114,8 @@
         }
     }
 
-    igv.NotebookLocalFile = NotebookLocalFile
+    igv.createNotebookLocalFile = function(options) {
+        return new NotebookLocalFile(options)
+    }
 
 })()

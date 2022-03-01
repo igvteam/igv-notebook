@@ -94,7 +94,7 @@
         } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("data:")) {
             return path
         } else {
-            return new igv.NotebookLocalFile({path: path})
+            return new igv.createNotebookLocalFile({path: path})
         }
 
     }
@@ -124,27 +124,6 @@
             return this.elements.length
         }
     }
-
-    let counter = 0
-
-    function uniqueID() {
-        return `${Math.random()}-${counter++}`
-    }
-
-    console.log('registering comm')
-
-    const comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
-
-    const pendingRequests = new Map()
-
-    // Register a handler
-    comm.on_msg(function (msg) {
-        console.log(msg)
-        const id = msg.content.data.id
-        const data = msg.content.data.data
-        pendingRequests.set(id, data)
-    })
-
 
     window.igv.MessageHandler = new MessageHandler()
 
