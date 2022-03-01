@@ -1,1 +1,1 @@
-from .browser import Browser, init
+from .browser import Browser, init, ping_frontend
