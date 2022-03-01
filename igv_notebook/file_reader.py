@@ -8,14 +8,14 @@ except:
 
 def read_file(path, start=None, end=None):
 
-        with open(path, 'rb') as binary_file:
-            if start != None:
-                size = end - start
-                binary_file.seek(start)
-                binary_file_data = binary_file.read(size)
-            else:
-                binary_file_data = binary_file.read()
-        return binary_file_data
+    with open(path, 'rb') as binary_file:
+        if start != None:
+            size = end - start
+            binary_file.seek(start)
+            binary_file_data = binary_file.read(size)
+        else:
+            binary_file_data = binary_file.read()
+    return binary_file_data
 
 
 
@@ -24,8 +24,13 @@ def register_filecomm():
     if IN_COLAB:
 
         def callback(path, start=None, end=None):
+            if start != None:
+                start = int(start)
+            if end != None:
+                end = int(end)
             binary_file_data = read_file(path, start, end)
-            return binary_file_data
+            return base64.b64encode(binary_file_data)
+            #return binary_file_data
 
         google.colab.output.register_callback('ReadFile', callback)
 

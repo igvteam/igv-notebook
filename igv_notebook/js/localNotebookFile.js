@@ -1,30 +1,28 @@
 /**
- * Global handler for igv.js messages.  Messages have the form
- * {
- *     command  -- the command to execute
- *     id -- the id of the igv.js browser, if applicable
- *     data -- any data needed for the command
- * }
+ * Mock objects to emulate the browser "File" class for use with Jupyter and Colab notebooks.  These objects delegate
+ * actual file reading to python.
  */
 
 // Use a self-evaluating function to keep variables in this file scope, with the execption of the global handler
 
 (function () {
 
+    const isColab = () => window.google !== undefined && window.google.colab
+    const isNotebook = () => window.Jupyter !== undefined
 
     igv.createNotebookLocalFile = function (options) {
-
         if (isColab()) {
             return new ColabLocalFile(options)
-        } else {
+        } else if (isNotebook()) {
             return new NotebookLocalFile(options)
         }
     }
 
 
+    // Start up a Comm object if in a Jupyter environment (i.e. not Colab).
     let comm
     const pendingRequests = new Map()
-    if (!isColab()) {
+    if (isNotebook()) {
         console.log('registering comm')
         comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
         // Register a handler
@@ -36,7 +34,10 @@
     }
 
     /**
-     * Emuulates a browser "File"
+     * Emulates a browser "File" for Jupyter notebooks.  File reading is delegated to python via Comms messaging.
+     * Polling is used to synchronize the async message passing.
+     *
+     * NOTE: This will not work for JupyterLab
      */
     class NotebookLocalFile {
 
@@ -120,7 +121,7 @@
     }
 
     /**
-     * Emulates a browser "File" for Colab environments
+     * Emulates a browser "File" for Colab environments.
      */
     class ColabLocalFile {
 
@@ -143,9 +144,8 @@
         }
 
         /**
-         * Returns a promise that resolves with an ArrayBuffer containing the entire contents of the Blob as binary data.
-         *
-         * @returns {Promise<*>}
+         * Returns a promise that resolves with an ArrayBuffer containing the entire contents of the Blob as
+         * binary data.
          */
         async arrayBuffer() {
 
@@ -156,13 +156,17 @@
                 [this.path] :
                 [this.path, this.start.toString(), this.end.toString()]
 
-            const data = await google.colab.kernel.invokeFunction(
+            const result = await google.colab.kernel.invokeFunction(
                 'ReadFile', // The callback name.
                 args, // The arguments.
                 {}) // kwargs
-            //const text = result.data['application/json'];
-
-            return data
+            const data = result.data["text/plain"]
+            const dataString = atob(data.substring(2, data.length - 1))
+            const bytes = new Uint8Array(dataString.length)
+            for (var i = 0; i < dataString.length; i++) {
+                bytes[i] = dataString.charCodeAt(i)
+            }
+            return bytes.buffer
         }
 
         /**
@@ -179,12 +183,8 @@
         }
     }
 
-
-    function isColab() {
-        return window.google && window.google.colab
-    }
-
     let counter = 0
+
     function uniqueID() {
         return `${Math.random()}-${counter++}`
     }

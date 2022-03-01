@@ -94,9 +94,11 @@
         } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("data:")) {
             return path
         } else {
-            return igv.createNotebookLocalFile({path: path})
+            // Try to create a notebook file.  If no notebook file implementation is available for the kernel in
+            // use (e.g. JupyterLab) just return 'path'
+            const nbFile = igv.createNotebookLocalFile({path})
+            return nbFile || path
         }
-
     }
 
     class Queue {
