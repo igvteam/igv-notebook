@@ -178,7 +178,11 @@
 
     igv.createNotebookLocalFile = function(options) {
 
-        return new NotebookLocalFile(options)
+        if(window.google && window.google.colab) {
+            return new ColabLocalFile(options)
+        } else {
+            return new NotebookLocalFile(options)
+        }
     }
 
 })()
