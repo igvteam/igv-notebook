@@ -3,7 +3,7 @@
  * actual file reading to python.
  */
 
-// Use a self-evaluating function to keep variables in this file scope, with the execption of the global handler
+// Use a self-evaluating function to keep variables in this file scope
 
 (function () {
 
@@ -14,7 +14,7 @@
         if (isColab()) {
             return new ColabLocalFile(options)
         } else if (isNotebook()) {
-            return new NotebookLocalFile(options)
+            return new JupyterLocalFile(options)
         }
     }
 
@@ -39,7 +39,7 @@
      *
      * NOTE: This will not work for JupyterLab
      */
-    class NotebookLocalFile {
+    class JupyterLocalFile {
 
         constructor({path, name, start, end}) {
             this.path = path
@@ -56,7 +56,7 @@
          * @returns {*}
          */
         slice(start, end) {
-            return new NotebookLocalFile({path: this.path, name: this.name, start, end})
+            return new JupyterLocalFile({path: this.path, name: this.name, start, end})
         }
 
         /**
@@ -147,9 +147,6 @@
          * binary data.
          */
         async arrayBuffer() {
-
-            const id = uniqueID()
-            const path = this.path
 
             const args = (this.start === undefined) ?
                 [this.path] :
