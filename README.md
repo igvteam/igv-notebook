@@ -21,11 +21,15 @@ conda install jupyter
 
 #### Build and install from source:
 
+Development 
 ```bash
-python setup.py build  
 pip install -e .
 ```
 
+Deploy
+```bash
+python setup.py build  
+```
 
 
 
