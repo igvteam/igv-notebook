@@ -39,14 +39,11 @@ pip install git+https://github.com/igvteam/igv-notebook.git
 
 ### Initialization
 
-After installing intialize igv_notebook as follows.  For a Jupyter notebook this should be done once.  Colab notebooks
-display output in a sandboxed iFrame for each cell, so these steps must be repeated for each cell in which 
+After installing intialize igv_notebook as follows.  For a Jupyter notebook this should be done once per notebook.  
+Colab notebooks display output in a sandboxed iFrame for each cell, so these steps must be repeated for each cell in which 
 igv-notebook is used.
 
-1. Import the package igv_notebook. 
-1. Call igv_notebook.init()
-
-Example:
+**Example:**
 
 ```python
 import igv_notebook
@@ -121,37 +118,25 @@ b.load_track(
 
 ```
 
-Embedded Features
-
-Features can also be passed directly to tracks.
-
-```python
-b.load_track({
-    "name": "Copy number",
-    "type": "seg",
-    "displayMode": "EXPANDED",
-    "height": 100,
-    "isLog": True,
-    "features": [
-        {
-            "chr": "chr20",
-            "start": 1233820,
-            "end": 1235000,
-            "value": 0.8239,
-            "sample": "TCGA-OR-A5J2-01"
-        },
-        {
-            "chr": "chr20",
-            "start": 1234500,
-            "end": 1235180,
-            "value": -0.8391,
-            "sample": "TCGA-OR-A5J3-01"
-        }
-    ]
-})
-```
 
 ### Navigation
+
+Jump to a specific genomic range
+
+```python
+b.search('chr1:3000-4000')
+
+```
+
+Jump to a specific gene. This uses the IGV search web service, which currently supports a limited number of 
+[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To customize the search load a non-indexed annotation
+track with the "searchable" property set to true (see [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Annotation-Track#configuration-options)).
+
+
+```python
+b.search('myc')
+
+```
 
 Zoom in by a factor of 2
 
@@ -165,21 +150,7 @@ Zoom out by a factor of 2
 b.zoom_out()
 ```
 
-Jump to a specific genomic range
 
-```python
-b.search('chr1:3000-4000')
-
-```
-
-Jump to a specific gene. This uses the IGV search web service, which currently supports a limited number of 
-[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).
-
-
-```python
-b.search('myc')
-
-```
 
 
 ### Development 
