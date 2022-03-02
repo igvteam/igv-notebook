@@ -89,11 +89,13 @@
     }
 
     function convertPath(path) {
+        console.log("path")
         if (!path) {
             return path
-        } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("data:")) {
+        } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("gs://") || path.startsWith("data:")) {
             return path
         } else {
+            console.log("local file")
             // Try to create a notebook file.  If no notebook file implementation is available for the kernel in
             // use (e.g. JupyterLab) just return 'path'
             const nbFile = igv.createNotebookLocalFile({path})
