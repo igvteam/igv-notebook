@@ -9,7 +9,7 @@ def init():
 
     register_filecomm()
 
-    igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.min.js')
+    igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.js')
     igv_file = open(igv_filepath, 'r')
     igv_js = igv_file.read()
     display(Javascript(igv_js))
@@ -47,8 +47,6 @@ class Browser(object):
         id = self._gen_id()
         config["id"] = id
         self.igv_id = id
-        self.config = config
-        self.locus = None
 
         """
         Create an igv.js "Browser" instance on the front end.
@@ -58,7 +56,7 @@ class Browser(object):
         self._send({
             "id": self.igv_id,
             "command": "createBrowser",
-            "data": self.config
+            "data": config
         })
 
     def load_track(self, config):
@@ -115,7 +113,6 @@ class Browser(object):
             "id": self.igv_id,
             "command": "zoomOut"
         })
-
 
     def _send(self, msg):
         javascript = """window.igv.MessageHandler.on(%s)""" % (json.dumps(msg))

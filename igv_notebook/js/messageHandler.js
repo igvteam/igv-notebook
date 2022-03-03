@@ -33,26 +33,58 @@
                     const command = msg.command
                     const browserID = msg.id
                     const data = msg.data
-                    let browser = this.browserCache.get(browserID)
+                    const browser = this.browserCache.get(browserID)
                     try {
                         switch (command) {
-
                             case "createBrowser":
-                                const div = document.getElementById(browserID)  // <= created from python
-                                browser = await igv.createBrowser(div, data)
-                                this.browserCache.set(browserID, browser)
+                                const container = document.getElementById(browserID)  // <= created from python
+
+                                const toSVGButton = {
+                                    label: "To SVG",
+                                    callback: (browser) => {
+                                        // Dangerous -- replaces browser object with svg rendering.  Non reversible
+                                        const parser = new DOMParser()
+                                        const doc = parser.parseFromString(browser.toSVG(), "image/svg+xml")
+                                        //const container = document.getElementById(browserID)
+                                        container.innerHTML = ""
+                                        container.appendChild(doc.documentElement)
+                                        this.browserCache.delete(browserID)
+                                    }
+                                }
+                                data.customButtons = [toSVGButton]
+
+                                data.url = convert(data.url)
+                                if (data.reference) {
+                                    data.reference.fastaURL = convert(data.reference.fastaURL)
+                                    data.reference.indexURL = convert(data.reference.indexURL)
+                                    data.reference.cytobandURL = convert(data.reference.cytobandURL)
+                                    data.reference.compressedIndexURL = convert(data.reference.compressedIndexURL)
+                                    if (data.reference.tracks) {
+                                        for (let t of data.reference.tracks) {
+                                            t.url = convert(t.url)
+                                            t.indexURL = convert(t.indexURL)
+                                        }
+                                    }
+                                }
+                                if (data.tracks) {
+                                    for (let t of data.tracks) {
+                                        t.url = convert(t.url)
+                                        t.indexURL = convert(t.indexURL)
+                                    }
+                                }
+
+                                const newBrowser = await igv.createBrowser(container, data)
+                                this.browserCache.set(browserID, newBrowser)
                                 break
 
                             case "loadTrack":
-
-                                const config = Object.assign({}, data)
-                                config.url = convertPath(data.url || data.path)
+                                data.url = convert(data.url)
                                 if (data.indexURL) {
-                                    config.indexURL = convertPath(data.indexURL)
+                                    data.indexURL = convert(data.indexURL)
                                 } else {
-                                    config.indexed = false
+                                    data.indexed = false
                                 }
-                                await browser.loadTrack(config)
+                                await browser.loadTrack(data)
 
                                 break
 
@@ -70,11 +102,8 @@
 
                             case "remove":
                                 this.browserCache.delete(browserID)
-                                document.getElementById(browserID).parentNode.removeChild(div)
+                                document.getElementById(browserID).parentNode.removeChild(container)
                                 break
-
-                            case "toSVG":
-                                return browser.toSVG()
 
                             default:
                                 console.error("Unrecognized method: " + msg.command)
@@ -88,14 +117,16 @@
         }
     }
 
-    function convertPath(path) {
-        console.log("path")
-        if (!path) {
-            return path
-        } else if (path.startsWith("https://") || path.startsWith("http://") || path.startsWith("gs://") || path.startsWith("data:")) {
+    /**
+     * Potentially convert a path to a local File-like object.
+     * @param path
+     * @returns {*}
+     */
+    function convert(path) {
+        if (!path ||
+            path.startsWith("https://") || path.startsWith("http://") || path.startsWith("gs://") || path.startsWith("data:")) {
             return path
         } else {
-            console.log("local file")
             // Try to create a notebook file.  If no notebook file implementation is available for the kernel in
             // use (e.g. JupyterLab) just return 'path'
             const nbFile = igv.createNotebookLocalFile({path})

@@ -68,15 +68,14 @@
 
             const id = uniqueID()
             const path = this.path
-            const promise = new Promise((resolve) => {
+            const promise = new Promise((resolve, reject) => {
                 let count = 0
 
                 function poll() {
 
                     if (count > 50) {
-                        alert(`error reading ${path}: timed out`)
                         console.error(`error reading ${path}: timed out`)
-                        resolve(undefined)
+                        reject(`error reading ${path}: timed out`)
                     }
 
                     count++
