@@ -86,6 +86,7 @@
                         for (var i = 0; i < dataString.length; i++) {
                             bytes[i] = dataString.charCodeAt(i)
                         }
+                        pendingRequests.delete(id)
                         resolve(bytes.buffer)
                     } else {
                         setTimeout(poll, 100)
