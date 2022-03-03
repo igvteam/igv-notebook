@@ -73,7 +73,7 @@
 
                 function poll() {
 
-                    if (count > 50) {
+                    if (count > 100) {
                         console.error(`error reading ${path}: timed out`)
                         reject(`error reading ${path}: timed out`)
                     }
