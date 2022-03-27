@@ -67,14 +67,33 @@ b = igv_notebook.Browser(
 )
 ```
 
+### URLS and paths
+
+Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
+supported in igv-notebook, however igv-notebook also provides equivalent properties for specfiying paths to local files for 
+use in **Jupyter Notebook** and **Colab**.  The _path_ properties do not work in **Jupyter Lab**, _url_ properties must be used.   
+
+Note that local files within Jupyter Lab or Notebook file workspace can be also be loaded via a "/files/" relative URL.  
+
+URL and Path properties
+
+| igv.js url property (Notebook, Lab, and Colab) | igv-notebook path property (Notebook, Colab) |
+| --------- | ----------- |
+ | url  | path |
+ | indexURL | indexPath |
+ | fastaURL | fastaPath |
+ | cytobandURL | cytobandPath |
+ | aliasURL | aliasPATH | 
+
 
 ### Tracks
 
 To load a track pass a track configuration object to ```b.load_track()```. Track configuration
-objects are described in the [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Tracks-2.0).
-The configuration object will be converted to JSON and passed to the igv.js browser instance.
+objects are described in the [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Tracks-2.0), however
+see the note on urls and paths below.The configuration object will be converted to JSON and passed to the igv.js browser instance.
 
 Data for the track can be loaded by URL, file path,  or passed directly as an array of JSON objects.
+
 
 **Examples:** 
 

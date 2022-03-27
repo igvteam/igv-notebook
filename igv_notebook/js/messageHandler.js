@@ -55,21 +55,35 @@
 
                                 data.url = convert(data.url)
                                 if (data.reference) {
-                                    data.reference.fastaURL = convert(data.reference.fastaURL)
-                                    data.reference.indexURL = convert(data.reference.indexURL)
-                                    data.reference.cytobandURL = convert(data.reference.cytobandURL)
-                                    data.reference.compressedIndexURL = convert(data.reference.compressedIndexURL)
+                                    if(data.reference.fastaPath) {
+                                        data.reference.fastaURL =convert(data.reference.fastaPath)
+                                    }
+                                    if(data.reference.indexPath) {
+                                        data.reference.indexURL = convert(data.reference.indexPath)
+                                    }
+                                    if(data.reference.cytobandPath) {
+                                        data.reference.cytobandURL = convert(data.reference.cytobandPath)
+                                    }
+                                    if(data.reference.compressedIndexPath) {
+                                        data.reference.compressedIndexURL = convert(data.reference.compressedIndexPath)
+                                    }
                                     if (data.reference.tracks) {
                                         for (let t of data.reference.tracks) {
-                                            t.url = convert(t.url)
-                                            t.indexURL = convert(t.indexURL)
+                                            if(t.path) {
+                                                t.url = convert(t.path)
+                                            }
+                                            if(t.indexPath) {
+                                                t.indexURL = convert(t.indexPath)
+                                            }
                                         }
                                     }
                                 }
                                 if (data.tracks) {
-                                    for (let t of data.tracks) {
-                                        t.url = convert(t.url)
-                                        t.indexURL = convert(t.indexURL)
+                                    if(t.path) {
+                                        t.url = convert(t.path)
+                                    }
+                                    if(t.indexPath) {
+                                        t.indexURL = convert(t.indexPath)
                                     }
                                 }
 
@@ -78,10 +92,13 @@
                                 break
 
                             case "loadTrack":
-                                data.url = convert(data.url)
-                                if (data.indexURL) {
-                                    data.indexURL = convert(data.indexURL)
-                                } else {
+                                if(data.path) {
+                                    data.url = convert(data.path)
+                                }
+                                if (data.indexPath) {
+                                    data.indexURL = convert(data.indexPath)
+                                }
+                                if(!data.indexURL) {
                                     data.indexed = false
                                 }
                                 await browser.loadTrack(data)
