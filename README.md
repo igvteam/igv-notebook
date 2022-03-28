@@ -1,19 +1,16 @@
 # igv.js notebook module
 
-[![Binder](https://beta.mybinder.org/badge.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?filepath=examples)
-=======
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?filepath=examples)   _**Jupyter Notebook**_
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?urlpath=lab/tree/examples)  _Jupyter Lab_
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
-=======
+
+============
 
 igv-notebook is a package which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.
-Both Jupyter Notebook and Google Colab runtimes are supported. The package will work in JupyterLab if all data file paths 
-are specified as absolute https URLs.  To use relative URLs or paths to local files see one of following JupyterLab 
-"extension" projects.
+Both Jupyter and Google Colab runtimes are supported. 
  
-*  [igv-jupyter](https://github.com/g2nb/igv-jupyter)  
-*  [igv-jupyterlab](https://github.com/epi2me-labs/igv-jupyterlab)
-
-``  
 
 #### Examples
 
@@ -39,7 +36,7 @@ pip install git+https://github.com/igvteam/igv-notebook.git
 
 ### Initialization
 
-After installing intialize igv_notebook as follows.  For a Jupyter notebook this should be done once per notebook.  
+After installing import and intialize igv_notebook as follows.  For a Jupyter notebook this should be done once per notebook.  
 Colab notebooks display output in a sandboxed iFrame for each cell, so these steps must be repeated for each cell in which 
 igv-notebook is used.
 
@@ -71,7 +68,10 @@ b = igv_notebook.Browser(
 
 Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
 supported in igv-notebook, however igv-notebook also provides equivalent properties for specfiying paths to local files for 
-use in **Jupyter Notebook** and **Colab**.  The _path_ properties do not work in **Jupyter Lab**, _url_ properties must be used.   
+use in **Jupyter Notebook** and **Colab**.  The _path_ properties can be used to load files outside of the Jupyter
+file tree.  
+
+The _path_ properties do not work in **Jupyter Lab**, _url_ properties must be used.   
 
 Note that local files within Jupyter Lab or Notebook file workspace can be also be loaded via a "/files/" relative URL.  
 

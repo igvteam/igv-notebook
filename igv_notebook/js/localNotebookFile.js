@@ -15,6 +15,8 @@
             return new ColabLocalFile(options)
         } else if (isNotebook()) {
             return new JupyterLocalFile(options)
+        } else {
+            return undefined;  //TODO -- throw error?
         }
     }
 
