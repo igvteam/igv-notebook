@@ -9,19 +9,10 @@ def init():
 
     register_filecomm()
 
-    igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.js')
+    igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.min.js')
     igv_file = open(igv_filepath, 'r')
     igv_js = igv_file.read()
     display(Javascript(igv_js))
-
-    #http://localhost:63342/igv.js/dev
-    #<script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.min.js"></script>
-    # igvjs = """
-    # const link = document.createElement("script")
-    # link.src = "http://localhost:63342/igv.js/dist/igv.js"
-    # document.getElementsByTagName("head")[0].appendChild(link)
-    # """
-    # display(Javascript(igvjs))
 
     message_filepath = os.path.join(os.path.dirname(__file__), 'js/messageHandler.js')
     file = open(message_filepath, 'r')
