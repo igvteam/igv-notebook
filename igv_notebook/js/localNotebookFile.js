@@ -21,7 +21,7 @@
     }
 
 
-    // Start up a Comm object if in a Jupyter environment (i.e. not Colab).
+    // Start up a Comm object if in a Jupyter Notebook environment (i.e. not Colab or JupyterLab).
     let comm
     const pendingRequests = new Map()
     if (isNotebook()) {
