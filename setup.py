@@ -26,5 +26,5 @@ setuptools.setup(name='igv-notebook',
                  #     'jupyter',
                  #     'notebook>=4.2.0',
                  # ],
-                 package_data={'igv_notebook': ['js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.js']},
+                 package_data={'igv_notebook': ['js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.min.js']},
                  )
