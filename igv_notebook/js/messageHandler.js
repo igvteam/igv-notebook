@@ -198,7 +198,7 @@
         } else {
 
             let pageURL = window.location.href
-            if(pageURL.includes("/lab/") && pageURL.includes("/tree/")) {
+            if (pageURL.includes("/lab/") && pageURL.includes("/tree/")) {
                 // Jupyter Lab
 
                 // Examples
@@ -210,23 +210,40 @@
 
                 const baseIndex = pageURL.indexOf("/lab/")
                 const baseURL = pageURL.substring(0, baseIndex)
-                if(url.startsWith("/files/")) {
-                    return baseURL + url
+                if (url.startsWith("/files/")) {
+                    return `${baseURL}${url}`
                 } else if (url.startsWith("/")) {
-                    return baseURL + "/files" + url
+                    return `${baseURL}/files${url}`
                 } else {
                     // Interpret URL as relative to notebook location
                     const treeIndex = pageURL.indexOf("/tree/") + 6
                     const lastSlashIndex = pageURL.lastIndexOf("/")
                     const notebookPath = pageURL.substring(treeIndex, lastSlashIndex)
-                    return baseURL + "/files/" + notebookPath + "/" + url
+                    return `${baseURL}/files/${notebookPath}/${url}`
                 }
             } else {
-               // Jupyter Notebook
-                if(url.startsWith("/") && !url.startsWith("/files/")) {
-                    return "/files" + url
+                // Jupyter Notebook
+                //
+                // Examples
+                // https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/notebooks/examples/BamFiles-Jupyter.ipynb
+                //   => https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/files/examples/data/gstt1_sample.bam",
+
+                const base_path = document.querySelector('body').getAttribute('data-base-url')
+                const nb_path = document.querySelector('body').getAttribute('data-notebook-path')
+                const nb_name = document.querySelector('body').getAttribute('data-notebook-name')
+                const nb_dir = nb_path.slice(0, -1 * nb_name.length)
+
+                //`${location.origin}${base_path}files/${nb_dir}${url}`
+                if (url.startsWith("/")) {
+                    if (url.startsWith("/files/")) {
+                        url = url.substring(1)   // Strip leading slash
+                    } else {
+                        url = `files/${url}`
+                    }
+                    return `${location.origin}${base_path}${url}`
                 } else {
-                    return url
+                    // URL is relative to notebook
+                    return `${location.origin}${base_path}files/${nb_dir}${url}`
                 }
             }
         }
