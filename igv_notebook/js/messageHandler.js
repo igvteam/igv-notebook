@@ -172,7 +172,7 @@
             return path
         } else {
             // Try to create a notebook file.  If no notebook file implementation is available for the kernel in
-            // use (e.g. JupyterLab) just return 'path'
+            // use (e.g. Jupyter Lab) treat as a URL.
             const nbFile = igv.createNotebookLocalFile({path})
             if (nbFile != null) {
                 return nbFile
@@ -196,34 +196,33 @@
             url.startsWith("data:")) {
             return url
         } else {
-            // Relative path -- interpret as relative to notebook
+
             let pageURL = window.location.href
-            if(pageURL.includes("/lab/") && pageURL.includes("/tree/")) {  // Jupyter Lab test
+            if(pageURL.includes("/lab/") && pageURL.includes("/tree/")) {
+                // Jupyter Lab
 
                 // Examples
                 // http://localhost:8888/lab/workspaces/auto-N/tree/examples/BamFiles.ipynb
-                // http://localhost:8888/files/examples/data/gstt1_sample.bam
+                //     =>  http://localhost:8888/files/examples/data/gstt1_sample.bam
                 //
                 // https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/lab/tree/examples/BamFiles.ipynb
-                // https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/files/examples/data/gstt1_sample.bam.bai
+                //    => https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/files/examples/data/gstt1_sample.bam
+
                 const baseIndex = pageURL.indexOf("/lab/")
                 const baseURL = pageURL.substring(0, baseIndex)
-
                 if(url.startsWith("/files/")) {
                     return baseURL + url
                 } else if (url.startsWith("/")) {
                     return baseURL + "/files" + url
                 } else {
+                    // Interpret URL as relative to notebook location
                     const treeIndex = pageURL.indexOf("/tree/") + 6
                     const lastSlashIndex = pageURL.lastIndexOf("/")
                     const notebookPath = pageURL.substring(treeIndex, lastSlashIndex)
-                    const u = baseURL + "/files/" + notebookPath + "/" + url
-                    console.log("url = " + u)
-                    return u
+                    return baseURL + "/files/" + notebookPath + "/" + url
                 }
-
             } else {
-               // Notebook
+               // Jupyter Notebook
                 if(url.startsWith("/") && !url.startsWith("/files/")) {
                     return "/files" + url
                 } else {

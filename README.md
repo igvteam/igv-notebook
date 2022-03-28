@@ -67,17 +67,21 @@ b = igv_notebook.Browser(
 ### URLS and paths
 
 Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
-supported in igv-notebook, however igv-notebook also provides equivalent properties for specfiying paths to local files for 
-use in **Jupyter Notebook** and **Colab**.  The _path_ properties can be used to load files outside of the Jupyter
-file tree.  
+supported in igv-notebook, however igv-notebook also provides equivalent _path_ properties for specfiying paths to 
+local files.  The _path_ properties are useful for
 
+1. Loading data in a Colab notebook from a local file
+1. Loading data from the local file system that is outside the Jupyter file tree. 
+
+Local files within Jupyter Lab or Notebook file workspace can be also be loaded via a "/files/" url, or a url that
+is relative to the notebook location.  This will usually yield better performance than using _path_ properties.
+ 
 The _path_ properties do not work in **Jupyter Lab**, _url_ properties must be used.   
 
-Note that local files within Jupyter Lab or Notebook file workspace can be also be loaded via a "/files/" relative URL.  
-
+   
 URL and Path properties
 
-| igv.js url property (Notebook, Lab, and Colab) | igv-notebook path property (Notebook, Colab) |
+| igv.js url property  | igv-notebook path property |
 | --------- | ----------- |
  | url  | path |
  | indexURL | indexPath |
