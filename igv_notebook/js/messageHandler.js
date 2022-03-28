@@ -190,7 +190,6 @@
      */
     function convertURL(url) {
         if (!url ||
-            url.startsWith("/files") ||
             url.startsWith("https://") ||
             url.startsWith("http://") ||
             url.startsWith("gs://") ||
