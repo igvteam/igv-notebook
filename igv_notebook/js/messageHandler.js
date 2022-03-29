@@ -11,6 +11,9 @@
 
 (function () {
 
+    const isColab = window.google !== undefined && window.google.colab
+    const isNotebook = window.Jupyter !== undefined
+
     console.log("Installing IGVMessageHandler")
 
     class MessageHandler {
@@ -54,56 +57,24 @@
                                 data.customButtons = [toSVGButton]
 
                                 if (data.reference) {
-                                    if (data.reference.fastaURL) {
-                                        data.reference.fastaURL = convertURL(data.reference.fastaURL)
-                                    } else if (data.reference.fastaPath) {
-                                        data.reference.fastaURL = createNotebookFile(data.reference.fastaPath)
-                                    }
-                                    if (data.reference.indexURL) {
-                                        data.reference.indexURL = convertURL(data.reference.indexURL)
-                                    } else if (data.reference.indexPath) {
-                                        data.reference.indexURL = createNotebookFile(data.reference.indexPath)
-                                    }
-                                    if (data.reference.cytobandURL) {
-                                        data.reference.cytobandURL = convertURL(data.reference.cytobandURL)
-                                    } else if (data.reference.cytobandPath) {
-                                        data.reference.cytobandURL = createNotebookFile(data.reference.cytobandPath)
-                                    }
-                                    if (data.reference.compressedIndexURL) {
-                                        data.reference.compressedIndexURL = convertURL(data.reference.compressedIndexURL)
-                                    } else if (data.reference.compressedIndexPath) {
-                                        data.reference.compressedIndexURL = createNotebookFile(data.reference.compressedIndexPath)
+                                    for (let pre of ["fasta", "index", "cytoband", "compressedIndex"]) {
+                                        convert(data.reference, pre)
                                     }
                                     if (data.reference.tracks) {
                                         for (let t of data.reference.tracks) {
-                                            if (t.url) {
-                                                t.url = convertURL(t.url)
-                                            } else if (t.path) {
-                                                t.url = createNotebookFile(t.path)
-                                            }
-                                            if (t.indexURL) {
-                                                t.indexURL = convertURL(t.indexURL)
-                                            } else if (t.indexPath) {
-                                                t.indexURL = createNotebookFile(t.indexPath)
-                                            }
+                                            convert(t)
+                                            convert(t, "index")
                                             if (!t.indexURL) {
                                                 t.indexed = false
                                             }
                                         }
                                     }
                                 }
+
                                 if (data.tracks) {
-                                    for (let t of data.tracks) {
-                                        if (t.url) {
-                                            t.url = convertURL(t.url)
-                                        } else if (t.path) {
-                                            t.url = createNotebookFile(t.path)
-                                        }
-                                        if (t.indexURL) {
-                                            t.indexURL = convertURL(t.indexURL)
-                                        } else if (t.indexPath) {
-                                            t.indexURL = createNotebookFile(t.indexPath)
-                                        }
+                                    for (let t of data.reference.tracks) {
+                                        convert(t)
+                                        convert(t, "index")
                                         if (!t.indexURL) {
                                             t.indexed = false
                                         }
@@ -115,16 +86,8 @@
                                 break
 
                             case "loadTrack":
-                                if (data.url) {
-                                    data.url = convertURL(data.url)
-                                } else if (data.path) {
-                                    data.url = createNotebookFile(data.path)
-                                }
-                                if (data.indexURL) {
-                                    data.indexURL = convertURL(data.indexURL)
-                                } else if (data.indexPath) {
-                                    data.indexURL = createNotebookFile(data.indexPath)
-                                }
+                                convert(data)
+                                convert(data, "index")
                                 if (!data.indexURL) {
                                     data.indexed = false
                                 }
@@ -189,65 +152,82 @@
      * @returns {*}
      */
     function convertURL(url) {
+
+        const pageURL = window.location.href
+
         if (!url ||
             url.startsWith("https://") ||
             url.startsWith("http://") ||
             url.startsWith("gs://") ||
             url.startsWith("data:")) {
             return url
-        } else {
+        } else if (isColab) {
+            // Interpret url as a path.  Its actually an error for user to use "urls" with colab
+            igv.createNotebookLocalFile({path: url})
+        } else if (isNotebook) {
+            // Jupyter Notebook
+            //
+            // Examples
+            // https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/notebooks/examples/BamFiles-Jupyter.ipynb
+            //   => https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/files/examples/data/gstt1_sample.bam",
 
-            let pageURL = window.location.href
-            if (pageURL.includes("/lab/") && pageURL.includes("/tree/")) {
-                // Jupyter Lab
+            const baseURL = document.querySelector('body').getAttribute('data-base-url')
+            const notebookPath = document.querySelector('body').getAttribute('data-notebook-path')
+            const notebookName = document.querySelector('body').getAttribute('data-notebook-name')
+            const notebookDir = notebookPath.slice(0, -1 * notebookName.length)
 
-                // Examples
-                // http://localhost:8888/lab/workspaces/auto-N/tree/examples/BamFiles.ipynb
-                //     =>  http://localhost:8888/files/examples/data/gstt1_sample.bam
-                //
-                // https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/lab/tree/examples/BamFiles.ipynb
-                //    => https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/files/examples/data/gstt1_sample.bam
-
-                const baseIndex = pageURL.indexOf("/lab/")
-                const baseURL = pageURL.substring(0, baseIndex)
-                if (url.startsWith("/files/")) {
-                    return `${baseURL}${url}`
-                } else if (url.startsWith("/")) {
-                    return `${baseURL}/files${url}`
-                } else {
-                    // Interpret URL as relative to notebook location
-                    const treeIndex = pageURL.indexOf("/tree/") + 6
-                    const lastSlashIndex = pageURL.lastIndexOf("/")
-                    const notebookPath = pageURL.substring(treeIndex, lastSlashIndex)
-                    return `${baseURL}/files/${notebookPath}/${url}`
-                }
+            //`${location.origin}${base_path}files/${nb_dir}${url}`
+            if (url.startsWith("/")) {
+                url = `files${url}`
+                return encodeURI(`${location.origin}${baseURL}${url}`)
             } else {
-                // Jupyter Notebook
-                //
-                // Examples
-                // https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/notebooks/examples/BamFiles-Jupyter.ipynb
-                //   => https://hub-binder.mybinder.ovh/user/igvteam-igv-notebook-tnlb45ie/files/examples/data/gstt1_sample.bam",
-
-                const base_path = document.querySelector('body').getAttribute('data-base-url')
-                const nb_path = document.querySelector('body').getAttribute('data-notebook-path')
-                const nb_name = document.querySelector('body').getAttribute('data-notebook-name')
-                const nb_dir = nb_path.slice(0, -1 * nb_name.length)
-
-                //`${location.origin}${base_path}files/${nb_dir}${url}`
-                if (url.startsWith("/")) {
-                    if (url.startsWith("/files/")) {
-                        url = url.substring(1)   // Strip leading slash
-                    } else {
-                        url = `files/${url}`
-                    }
-                    return `${location.origin}${base_path}${url}`
-                } else {
-                    // URL is relative to notebook
-                    return `${location.origin}${base_path}files/${nb_dir}${url}`
-                }
+                // URL is relative to notebook
+                return encodeURI(`${location.origin}${baseURL}files/${notebookDir}${url}`)
             }
+        } else if (pageURL.includes("/lab/")) {
+            // Jupyter Lab
+
+            // Examples
+            // http://localhost:8888/lab/workspaces/auto-N/tree/examples/BamFiles.ipynb
+            //     =>  http://localhost:8888/files/examples/data/gstt1_sample.bam
+            //
+            // https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/lab/tree/examples/BamFiles.ipynb
+            //    => https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/files/examples/data/gstt1_sample.bam
+
+            const baseIndex = pageURL.indexOf("/lab/")
+            const baseURL = pageURL.substring(0, baseIndex)
+
+            if (url.startsWith("/")) {
+                return encodeURI(`${baseURL}/files${url}`)
+            } else if (pageURL.includes("/tree/")) {
+                // Interpret URL as relative to notebook location.  This is not reliable, '/tree/' is not always in the page URL
+                const treeIndex = pageURL.indexOf("/tree/") + 6
+                const lastSlashIndex = pageURL.lastIndexOf("/")
+                const notebookDir = pageURL.substring(treeIndex, lastSlashIndex)
+                return encodeURI(`${baseURL}/files/${notebookDir}/${url}`)
+            } else {
+                // We don't know how to determine the notebook path
+                console.warn("Page url missing '/tree/'.  Can't determine notebook path.")
+                return encodeURI(`${baseURL}/files/${url}`)
+            }
+        } else {
+            // We should never get here,
+            return encodeURI(url)
         }
     }
+
+
+    function convert(config, prefix) {
+        const urlProp = prefix ? prefix + "URL" : "url"
+        const pathProp = prefix ? prefix + "Path" : "path"
+        if (config[urlProp]) {
+            config[urlProp] = convertURL(config[urlProp])
+        } else if (config[pathProp]) {
+            config[urlProp] = createNotebookFile(config[pathProp])
+        }
+    }
+
+
 
     class Queue {
         constructor() {

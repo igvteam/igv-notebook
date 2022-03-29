@@ -7,13 +7,13 @@
 
 (function () {
 
-    const isColab = () => window.google !== undefined && window.google.colab
-    const isNotebook = () => window.Jupyter !== undefined
+    const isColab =  window.google !== undefined && window.google.colab
+    const isNotebook =  window.Jupyter !== undefined
 
     igv.createNotebookLocalFile = function (options) {
-        if (isColab()) {
+        if (isColab) {
             return new ColabLocalFile(options)
-        } else if (isNotebook()) {
+        } else if (isNotebook) {
             return new JupyterLocalFile(options)
         } else {
             return undefined;  //TODO -- throw error?
@@ -24,7 +24,7 @@
     // Start up a Comm object if in a Jupyter Notebook environment (i.e. not Colab or JupyterLab).
     let comm
     const pendingRequests = new Map()
-    if (isNotebook()) {
+    if (isNotebook) {
         console.log('registering comm')
         comm = Jupyter.notebook.kernel.comm_manager.new_comm('file_request', {})
         // Register a handler
