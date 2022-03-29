@@ -72,7 +72,7 @@
                                 }
 
                                 if (data.tracks) {
-                                    for (let t of data.reference.tracks) {
+                                    for (let t of data.tracks) {
                                         convert(t)
                                         convert(t, "index")
                                         if (!t.indexURL) {
