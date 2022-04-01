@@ -21,7 +21,7 @@ Other projects enabling embedding igv.js in notebooks include
 
 The main differences between igv-notebook and these projects are: (1) igv-notebook is a python package, while the 
 projects listed abover are Jupyter extensions, (2) igv-notebook works with Google Colab, and (3) igv-notebook
-support loading data files from any location on the local file system.
+supports loading data files from any location on the local file system when used with Jupyter Notebook.
 
 
 ### Examples
@@ -81,19 +81,12 @@ b = igv_notebook.Browser(
 
 Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
 supported in igv-notebook, however igv-notebook also provides equivalent _path_ properties for specfiying paths to 
-local files.  The _path_ properties are useful for
+local files when used with Jupyter Notebook or Colab.  The _path_ properties cannot be used with JupyterLab.  The _path_ properties are useful for
 
-1. Loading data in a Colab notebook from a local file
-1. Loading data from the local file system that is outside the Jupyter file tree. 
+1. Loading data in a Colab notebook from the local Colab files system or a mounted Google Drive
+1. Loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
 
-Local files within JupyterLab or Jupyter Notebook file workspace can be also be loaded via a "/files/" url, or a url that
-is relative to the notebook location.  This will usually yield better performance than using _path_ properties.
- 
-The _path_ properties do not work in **JupyterLab**, _url_ properties must be used.   
-
-   
-URL and Path properties
-
+**URL and Path properties**
 | igv.js url property  | igv-notebook path property |
 | --------- | ----------- |
  | url  | path |
@@ -101,6 +94,11 @@ URL and Path properties
  | fastaURL | fastaPath |
  | cytobandURL | cytobandPath |
  | aliasURL | aliasPATH | 
+
+
+Local files Jupyter Notebook file workspace can be also be loaded via the url property if the file is in Jupyter Notebook startup directory
+tree.  This will usually yield better performance than using _path_ properties.  For both Jupyter Lab URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.
+
 
 
 ### Tracks
