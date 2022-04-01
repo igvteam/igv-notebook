@@ -97,7 +97,8 @@ local files when used with Jupyter Notebook or Colab.  The _path_ properties can
 
 
 Local files Jupyter Notebook file workspace can be also be loaded via the url property if the file is in Jupyter Notebook startup directory
-tree.  This will usually yield better performance than using _path_ properties.  For both Jupyter Lab URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.
+tree.  This will usually yield better performance than using _path_ properties.  For both Jupyter Lab URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.  See below fo examples.
+
 
 
 
