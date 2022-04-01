@@ -66,7 +66,7 @@ supported in igv-notebook, however igv-notebook also provides equivalent ```path
 local files when used with Jupyter Notebook or Colab.  (_**Note**_: The ```path``` properties cannot be used with JupyterLab, however local files can
 be loaded by URL).  The ```path``` properties are useful for
 
-1. Loading data in a Colab notebook from the local Colab files system or a mounted Google Drive
+1. Loading data in a Colab notebook from the local Colab file system or a mounted Google Drive
 1. Loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
 
 **URL and Path properties**
