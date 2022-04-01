@@ -58,7 +58,29 @@ igv_notebook.init()
 For a Jupyter notebook this should be done once per notebook.   Colab notebooks display output in a sandboxed iFrame 
 for each cell, so these steps must be repeated for each cell in which  igv-notebook is used.
 
-**Example:**
+
+### URLS and paths
+
+Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
+supported in igv-notebook, however igv-notebook also provides equivalent ```path``` properties for specfiying paths to 
+local files when used with Jupyter Notebook or Colab.  (_**Note**_: The ```path``` properties cannot be used with JupyterLab, however local files can
+be loaded by URL).  The ```path``` properties are useful for
+
+1. Loading data in a Colab notebook from the local Colab files system or a mounted Google Drive
+1. Loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
+
+**URL and Path properties**
+| igv.js url property  | igv-notebook path property |
+| --------- | ----------- |
+ | url  | path |
+ | indexURL | indexPath |
+ | fastaURL | fastaPath |
+ | cytobandURL | cytobandPath |
+ | aliasURL | aliasPATH | 
+
+
+For Jupyter servers (Notebook and Lab) local files can be also be loaded via the url property if the file is in Jupyter startup directory
+tree.  This will usually yield better performance than using ```path``` properties.  URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.  See below for examples.  You can also use the "download url" for the file, obtainable through the JupyterLab UI, as the URL for igv.
 
 ### Browser creation
 
@@ -76,29 +98,6 @@ b = igv_notebook.Browser(
     }
 )
 ```
-
-### URLS and paths
-
-Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
-supported in igv-notebook, however igv-notebook also provides equivalent _path_ properties for specfiying paths to 
-local files when used with Jupyter Notebook or Colab.  The _path_ properties cannot be used with JupyterLab.  The _path_ properties are useful for
-
-1. Loading data in a Colab notebook from the local Colab files system or a mounted Google Drive
-1. Loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
-
-**URL and Path properties**
-| igv.js url property  | igv-notebook path property |
-| --------- | ----------- |
- | url  | path |
- | indexURL | indexPath |
- | fastaURL | fastaPath |
- | cytobandURL | cytobandPath |
- | aliasURL | aliasPATH | 
-
-
-Local files Jupyter Notebook file workspace can be also be loaded via the url property if the file is in Jupyter Notebook startup directory
-tree.  This will usually yield better performance than using _path_ properties.  For both Jupyter Lab URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.  See below fo examples.
-
 
 
 
