@@ -21,7 +21,8 @@ Other projects enabling embedding igv.js in notebooks include
 
 The main differences between igv-notebook and these projects are: (1) igv-notebook is a python package, while the 
 projects listed above are Jupyter extensions, (2) igv-notebook works with Google Colab, and (3) igv-notebook
-supports loading data files from any location on the local file system when used with Jupyter Notebook.
+supports loading data files from any location on the local or mounted file system when used with Jupyter Notebook or 
+Google Colab.
 
 
 ### Examples
@@ -44,7 +45,7 @@ Typical usage proceeds as follow
 ### Installation
 
 ```bash
-pip install git+https://github.com/igvteam/igv-notebook.git
+pip install igv-notebook
 ```
 
 ### Initialization

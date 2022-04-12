@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(name='igv-notebook',
                  packages=['igv_notebook'],
-                 version='0.1.0',
+                 version='0.2.0',
                  description='Package for embedding the juicebox.js genome visualization in IPython notebooks',
                  long_description=longdescription,
                  long_description_content_type="text/markdown",
