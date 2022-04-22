@@ -12,13 +12,10 @@ pip install -e .
 
 #### Deploying to pypi
 
-Currently igv-notebook is in pre-release and not deployed to pypi.  
-
-Notes for future reference
-
 * Bump version number
 *  Add version tag
 *  Build the archive
+
 ```bash
 python setup.py sdist bdist_wheel
 ```
@@ -40,3 +37,8 @@ python -m twine upload dist/*
 ```bash
 pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple igv_notebook
 ```
+
+
+### Example Notebook
+
+[Colab example](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
