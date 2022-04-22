@@ -1,6 +1,6 @@
 import requests
 
-remote_url = "https://cdn.jsdelivr.net/npm/igv@2.12.2/dist/igv.min.js"
+remote_url = "https://cdn.jsdelivr.net/npm/igv@2.12.4/dist/igv.min.js"
 
 # Define the local filename to save data
 local_file = '../igv_notebook/js/igv.min.js'
