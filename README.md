@@ -217,12 +217,11 @@ Zoom out by a factor of 2
 b.zoom_out()
 ```
 
-
-
-
 ### Development 
 
 requires python >= 3.6.4
+
+Development install
 
 ```bash
 pip install -e .
@@ -232,3 +231,8 @@ Build
 ```bash
 python setup.py build  
 ```
+
+### Release Notes
+
+[https://github.com/igvteam/igv-notebook/releases](https://github.com/igvteam/igv-notebook/releases)
+
