@@ -29,7 +29,7 @@ Google Colab.
 
 Example notebooks are available in the github repository, and can be run from the Binder and Colab links above. 
 To download examples without cloning the repository use this 
-[link](https://github.com/igvteam/igv.js-jupyter/archive/master.zip). Notebooks are available in the
+[link](https://github.com/igvteam/igv-notebook/archive/master.zip). Notebooks are available in the
 "examples" directory.
 
 ### Usage
@@ -80,8 +80,12 @@ be loaded by URL).  The ```path``` properties are useful for
  | aliasURL | aliasPATH | 
 
 
-For Jupyter servers (Notebook and Lab) local files can be also be loaded via the url property if the file is in Jupyter startup directory
-tree.  This will usually yield better performance than using ```path``` properties.  URL paths that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you started Jupyter Notebook or JupyterLab.  URL paths without a leading slash are assumed to be relative to the notebook directory.  See below for examples.  You can also use the "download url" for the file, obtainable through the JupyterLab UI, as the URL for igv.
+For Jupyter servers (Notebook and Lab) local files can be also be loaded via the url property if the file is in Jupyter 
+startup directory tree.  This will usually yield better performance than using ```path``` properties.  URL paths 
+that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you 
+started Jupyter Notebook or JupyterLab.  For Jupyter Notebook URL paths without a leading slash can be used and are 
+assumed to be relative to the notebook  directory.  See below for examples.  You can also use the "download url" for 
+the file, obtainable through the JupyterLab UI, as the URL for igv.
 
 ### Browser creation
 
