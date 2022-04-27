@@ -1,4 +1,5 @@
 import base64
+from IPython import get_ipython
 
 try:
     import google.colab.output
