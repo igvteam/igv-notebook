@@ -4,7 +4,9 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?urlpath=lab/tree/examples)  _**JupyterLab**_
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
+
+[![PyPI](https://img.shields.io/pypi/v/igv-notebook?label=pypi%20package)](https://pypi.org/project/igv-notebook/)
 
 ============
 
@@ -15,7 +17,7 @@ Both Jupyter and Google Colab runtimes are supported.
 
 Other projects enabling embedding igv.js in notebooks include
 
-* [igv-jupyter](https://github.com/g2nb/igv-jupyter)  (predecessor to igv-notebook)
+* [igv-jupyter](https://github.com/g2nb/igv-jupyter)  (wrapper around igv-notebook that adds g2nb integration)
 * [igv-jupyterlab](https://github.com/epi2me-labs/igv-jupyterlab)
 * [ipyigv](https://github.com/QuantStack/ipyigv)
 
