@@ -4,13 +4,13 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?urlpath=lab/tree/examples)  _**JupyterLab**_
 
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)    _**Google Colab**_
 
 [![PyPI](https://img.shields.io/pypi/v/igv-notebook?label=pypi%20package)](https://pypi.org/project/igv-notebook/)
 
 ============
 
-igv-notebook is a python package which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.
+igv-notebook is a Python package which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.
 Both Jupyter and Google Colab runtimes are supported. 
 
 ### Related projects
@@ -21,9 +21,11 @@ Other projects enabling embedding igv.js in notebooks include
 * [igv-jupyterlab](https://github.com/epi2me-labs/igv-jupyterlab)
 * [ipyigv](https://github.com/QuantStack/ipyigv)
 
-The main differences between igv-notebook and these projects are: (1) igv-notebook is a python package, while the 
-projects listed above are Jupyter extensions, (2) igv-notebook works with Google Colab, and (3) igv-notebook
-supports loading data files from any location on the local or mounted file system when used with Jupyter Notebook or 
+The main differences between igv-notebook and these other projects are: 
+
+* igv-notebook is a Python package, while the projects listed above are Jupyter extensions;
+* igv-notebook works with Google Colab, in addition to Jupyter and JupyterLab; and 
+* igv-notebook supports loading data files from any location on the local or mounted file system when used with Jupyter Notebook or 
 Google Colab.
 
 
@@ -52,7 +54,7 @@ pip install igv-notebook
 
 ### Initialization
 
-After installing import and intialize igv_notebook as follows. 
+After installing, import and intialize igv_notebook as follows. 
 
 ```python
 import igv_notebook
@@ -60,34 +62,6 @@ igv_notebook.init()
 ```
 For a Jupyter notebook this should be done once per notebook.   Colab notebooks display output in a sandboxed iFrame 
 for each cell, so these steps must be repeated for each cell in which  igv-notebook is used.
-
-
-### URLS and paths
-
-Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
-supported in igv-notebook, however igv-notebook also provides equivalent ```path``` properties for specfiying paths to 
-local files when used with Jupyter Notebook or Colab.  (_**Note**_: The ```path``` properties cannot be used with JupyterLab, however local files can
-be loaded by URL).  The ```path``` properties are useful for
-
-1. Loading data in a Colab notebook from the local Colab file system or a mounted Google Drive
-1. Loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
-
-**URL and Path properties**
-| igv.js url property  | igv-notebook path property |
-| --------- | ----------- |
- | url  | path |
- | indexURL | indexPath |
- | fastaURL | fastaPath |
- | cytobandURL | cytobandPath |
- | aliasURL | aliasPATH | 
-
-
-For Jupyter servers (Notebook and Lab) local files can be also be loaded via the url property if the file is in Jupyter 
-startup directory tree.  This will usually yield better performance than using ```path``` properties.  URL paths 
-that begin with a "/" are relative to the Jupyter server startup directory, that is the directory from where you 
-started Jupyter Notebook or JupyterLab.  For Jupyter Notebook URL paths without a leading slash can be used and are 
-assumed to be relative to the notebook  directory.  See below for examples.  You can also use the "download url" for 
-the file, obtainable through the JupyterLab UI, as the URL for igv.
 
 ### Browser creation
 
@@ -106,15 +80,40 @@ b = igv_notebook.Browser(
 )
 ```
 
+### URLS and paths
 
+Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
+supported in igv-notebook, however igv-notebook also provides equivalent ```path``` properties for specfiying paths to 
+local files when used with Jupyter Notebook or Colab.  (_**Note**_: The ```path``` properties cannot be used with JupyterLab, however local files can
+be loaded by URL).  The ```path``` properties are useful for:
+
+* loading data in a Colab notebook from the local Colab file system or a mounted Google Drive; and
+* loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
+
+**URL and Path properties**
+| igv.js url property  | igv-notebook path property |
+| --------- | ----------- |
+ | url  | path |
+ | indexURL | indexPath |
+ | fastaURL | fastaPath |
+ | cytobandURL | cytobandPath |
+ | aliasURL | aliasPATH | 
+
+
+For Jupyter servers (Notebook and Lab), local files can be also be loaded via the url property if the file is in the Jupyter 
+startup directory tree.  This will usually yield better performance than using ```path``` properties.  URL paths 
+that begin with a "/" are relative to the Jupyter server startup directory, i.e. the directory from where you 
+started Jupyter Notebook or JupyterLab.  For Jupyter Notebook, URL paths without a leading slash can be used and are 
+assumed to be relative to the notebook  directory.  See below for examples.  You can also use the "download url" for 
+the file, obtainable through the JupyterLab UI, as the URL for igv.
 
 ### Tracks
 
-To load a track pass a track configuration object to ```b.load_track()```. Track configuration
+To load a track, pass a track configuration object to ```b.load_track()```. Track configuration
 objects are described in the [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Tracks-2.0), however
-see the note on urls and paths below.The configuration object will be converted to JSON and passed to the igv.js browser instance.
+see the note on _URLs and paths_ above. The configuration object will be converted to JSON and passed to the igv.js browser instance.
 
-Data for the track can be loaded by URL, file path,  or passed directly as an array of JSON objects.
+Data for the track can be loaded by URL, file path, or passed directly as an array of JSON objects.
 
 
 **Examples:** 
@@ -202,7 +201,7 @@ b.search('chr1:3000-4000')
 ```
 
 Jump to a specific gene. This uses the IGV search web service, which currently supports a limited number of 
-[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To customize the search load a non-indexed annotation
+[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To customize the search, load a non-indexed annotation
 track with the "searchable" property set to true (see [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Annotation-Track#configuration-options)).
 
 
