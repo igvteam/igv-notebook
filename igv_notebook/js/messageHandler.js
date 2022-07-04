@@ -12,7 +12,12 @@
 (function () {
 
     const isColab = window.google !== undefined && window.google.colab
-    const isNotebook = window.Jupyter !== undefined
+    const isNotebook = !isColab && window.Jupyter !== undefined
+
+    let svgComm
+    if (isNotebook) {
+        svgComm = Jupyter.notebook.kernel.comm_manager.new_comm('svg', {})
+    }
 
     console.log("Installing IGVMessageHandler")
 
@@ -45,13 +50,23 @@
                                 const toSVGButton = {
                                     label: "To SVG",
                                     callback: (browser) => {
-                                        // Dangerous -- replaces browser object with svg rendering.  Non reversible
-                                        const parser = new DOMParser()
-                                        const doc = parser.parseFromString(browser.toSVG(), "image/svg+xml")
-                                        //const container = document.getElementById(browserID)
-                                        container.innerHTML = ""
-                                        container.appendChild(doc.documentElement)
-                                        this.browserCache.delete(browserID)
+                                        // // Dangerous -- replaces browser object with svg rendering.  Non reversible
+                                        // const parser = new DOMParser()
+                                        // const doc = parser.parseFromString(browser.toSVG(), "image/svg+xml")
+                                        // //const container = document.getElementById(browserID)
+                                        // container.innerHTML = ""
+                                        // container.appendChild(doc.documentElement)
+                                        // this.browserCache.delete(browserID)
+
+                                        if (svgComm) {
+                                            const svg = browser.toSVG()
+                                            const id = data
+                                            console.log(`send ${id}  ${svg}`)
+                                            svgComm.send({
+                                                "id": id,
+                                                "svg": svg
+                                            })
+                                        }
                                     }
                                 }
                                 data.customButtons = [toSVGButton]
@@ -110,6 +125,18 @@
                             case "remove":
                                 this.browserCache.delete(browserID)
                                 document.getElementById(browserID).parentNode.removeChild(container)
+                                break
+
+                            case "getSvg":
+                                if (svgComm) {
+                                    const svg = browser.toSVG()
+                                    const id = data
+                                    console.log(`send ${id}  ${svg}`)
+                                    svgComm.send({
+                                        "id": id,
+                                        "svg": svg
+                                    })
+                                }
                                 break
 
                             default:
@@ -226,7 +253,6 @@
             config[urlProp] = createNotebookFile(config[pathProp])
         }
     }
-
 
 
     class Queue {

@@ -8,7 +8,7 @@
 (function () {
 
     const isColab =  window.google !== undefined && window.google.colab
-    const isNotebook =  window.Jupyter !== undefined
+    const isNotebook =  !isColab &&  window.Jupyter !== undefined
 
     igv.createNotebookLocalFile = function (options) {
         if (isColab) {

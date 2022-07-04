@@ -1,9 +1,16 @@
 import json
 import random
 import os.path
+import threading
+import time
+from threading import Thread
+import threading
 
-from IPython.display import HTML, Javascript, display
+from IPython.display import HTML, Javascript, SVG, display
 from .file_reader import register_filecomm
+from .svg import register_svgcomm
+
+svg_cache = {}
 
 def init():
 
@@ -24,6 +31,8 @@ def init():
     nb_js = nbfile.read()
     display(Javascript(nb_js))
 
+
+
 class Browser(object):
 
     # Always remember the *self* argument
@@ -42,7 +51,12 @@ class Browser(object):
         """
         Create an igv.js "Browser" instance on the front end.
         """
-        display(HTML("""<div id="%s"></div>""" % (self.igv_id)))
+        self.d = display(display_id = True)
+        self.d.display(HTML("""<div id="%s"></div>""" % (self.igv_id)))
+
+        self.svg_cache = {}
+        register_svgcomm(self.d)
+
 
         self._send({
             "id": self.igv_id,
@@ -105,6 +119,16 @@ class Browser(object):
             "command": "zoomOut"
         })
 
+    def get_svg(self):
+        svg_id = self._gen_id()
+        self._send({
+            "id": self.igv_id,
+            "command": "getSvg",
+            "data": svg_id
+        })
+
+
+
     def _send(self, msg):
         javascript = """window.igv.MessageHandler.on(%s)""" % (json.dumps(msg))
         # print(javascript)
@@ -112,3 +136,5 @@ class Browser(object):
 
     def _gen_id(self):
         return 'jb_' + str(random.randint(1, 10000000))
+
+
