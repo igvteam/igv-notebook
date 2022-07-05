@@ -19,10 +19,12 @@
         svgComm = Jupyter.notebook.kernel.comm_manager.new_comm('svg', {})
     }
 
-    async function toSVG(displayID, svg) {
+    async function toSVG(displayID, locus, svg) {
+        console.log(isNotebook + " " + locus)
         if (isNotebook) {
             svgComm.send({
                 "display_id": displayID,
+                "locus": locus,
                 "svg": svg
             })
         }
@@ -61,8 +63,9 @@
                                     const toSVGButton = {
                                         label: "To SVG",
                                         callback: (browser) => {
+                                            const locus = browser.referenceFrameList.map(rf => rf.getLocusString()).join(' ')
                                             const svg = browser.toSVG()
-                                            toSVG(browserID, svg)
+                                            toSVG(browserID, locus, svg)
                                         }
                                     }
                                     data.customButtons = [toSVGButton]
@@ -127,7 +130,8 @@
                             case "toSVG":
                                 const displayId = data
                                 const svg = browser.toSVG()
-                                toSVG(displayId, svg)
+                                const locus = browser.referenceFrameList.map(rf => rf.getLocusString()).join(' ')
+                                toSVG(displayId, locus, svg)
                                 break
 
                             default:

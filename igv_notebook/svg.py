@@ -1,6 +1,6 @@
 from IPython import get_ipython
 
-from IPython.display import update_display, SVG
+from IPython.display import update_display, display, SVG, HTML
 
 def register_svgcomm():
 
@@ -12,7 +12,11 @@ def register_svgcomm():
 
             data = msg['content']['data']
             display_id = data['display_id']
+            locus = data['locus']
             svg = data['svg']
-            update_display(SVG(svg), display_id = display_id, clear=True)
+
+            markup = HTML("""<div> <div style="font-size: small;">%s</div> <div style="margin-top:10px;border:solid #ddd;">%s</div></div>""" % (locus, svg))
+
+            update_display(markup, display_id = display_id, clear=True)
 
     get_ipython().kernel.comm_manager.register_target('svg', target_func)
