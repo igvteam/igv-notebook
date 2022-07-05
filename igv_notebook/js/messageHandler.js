@@ -19,6 +19,21 @@
         svgComm = Jupyter.notebook.kernel.comm_manager.new_comm('svg', {})
     }
 
+    async function toSVG(displayID, svg) {
+
+        if (isNotebook) {
+            svgComm.send({
+                "display_id": displayID,
+                "svg": svg
+            })
+        } else if (isColab) {
+            await google.colab.kernel.invokeFunction(
+                'ToSVG', // The callback name.
+                [displayID, svg], // The arguments.
+                {})
+        }
+    }
+
     console.log("Installing IGVMessageHandler")
 
     class MessageHandler {
@@ -45,31 +60,19 @@
                     try {
                         switch (command) {
                             case "createBrowser":
+
                                 const container = document.getElementById(browserID)  // <= created from python
 
-                                const toSVGButton = {
-                                    label: "To SVG",
-                                    callback: (browser) => {
-                                        // // Dangerous -- replaces browser object with svg rendering.  Non reversible
-                                        // const parser = new DOMParser()
-                                        // const doc = parser.parseFromString(browser.toSVG(), "image/svg+xml")
-                                        // //const container = document.getElementById(browserID)
-                                        // container.innerHTML = ""
-                                        // container.appendChild(doc.documentElement)
-                                        // this.browserCache.delete(browserID)
-
-                                        if (svgComm) {
+                                if (isColab || isNotebook) {
+                                    const toSVGButton = {
+                                        label: "To SVG",
+                                        callback: (browser) => {
                                             const svg = browser.toSVG()
-                                            const id = data
-                                            console.log(`send ${id}  ${svg}`)
-                                            svgComm.send({
-                                                "id": id,
-                                                "svg": svg
-                                            })
+                                            toSVG(browserID, svg)
                                         }
                                     }
+                                    data.customButtons = [toSVGButton]
                                 }
-                                data.customButtons = [toSVGButton]
 
                                 if (data.reference) {
                                     for (let pre of ["fasta", "index", "cytoband", "compressedIndex"]) {
@@ -127,16 +130,10 @@
                                 document.getElementById(browserID).parentNode.removeChild(container)
                                 break
 
-                            case "getSvg":
-                                if (svgComm) {
-                                    const svg = browser.toSVG()
-                                    const id = data
-                                    console.log(`send ${id}  ${svg}`)
-                                    svgComm.send({
-                                        "id": id,
-                                        "svg": svg
-                                    })
-                                }
+                            case "toSVG":
+                                const displayId = data
+                                const svg = browser.toSVG()
+                                toSVG(displayId, svg)
                                 break
 
                             default:
@@ -168,7 +165,7 @@
                 return nbFile
             } else {
                 // Try to treat as relative URL.  This may or may not work
-                return convertURL(url)
+                return convertURL(path)
             }
         }
     }
