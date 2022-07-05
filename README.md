@@ -36,7 +36,7 @@ To download examples without cloning the repository use this
 [link](https://github.com/igvteam/igv-notebook/archive/master.zip). Notebooks are available in the
 "examples" directory.
 
-### Usage
+## Usage
 
 Typical usage proceeds as follow
 
@@ -222,7 +222,15 @@ Zoom out by a factor of 2
 b.zoom_out()
 ```
 
-### Development 
+### SVG conversion
+
+For Jupyter Notebook only, the browser function ```to_svg()``` will convert an igv.js instance to a static SVG image representing its current state.  This is useful when converting the notebook to formats such as HTML and PDF.   This function can also be invoked from the "To SVG" button on the igv.js command bar.
+
+```python
+b.to_svg()
+```
+
+## Development 
 
 requires python >= 3.6.4
 
@@ -237,7 +245,7 @@ Build
 python setup.py build  
 ```
 
-### Release Notes
+## Release Notes
 
 [https://github.com/igvteam/igv-notebook/releases](https://github.com/igvteam/igv-notebook/releases)
 
