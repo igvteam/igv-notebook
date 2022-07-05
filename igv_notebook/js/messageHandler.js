@@ -72,7 +72,7 @@
                                 }
 
                                 if (data.reference) {
-                                    for (let pre of ["fasta", "index", "cytoband", "compressedIndex"]) {
+                                    for (let pre of ["fasta", "index", "cytoband", "compressedIndex", "alias"]) {
                                         convert(data.reference, pre)
                                     }
                                     if (data.reference.tracks) {
@@ -184,7 +184,7 @@
             url.startsWith("data:")) {
             return url
         } else if (isColab) {
-            // Interpret url as a path.  Its actually an error for user to use "urls" with colab
+            // Interpret relative url as a path.
             igv.createNotebookLocalFile({path: url})
         } else if (isNotebook) {
             // Jupyter Notebook
