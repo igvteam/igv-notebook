@@ -1,20 +1,15 @@
 import json
 import random
 import os.path
-import threading
-import time
-from threading import Thread
-import threading
 
-from IPython.display import HTML, Javascript, SVG, display
+from IPython.display import HTML, Javascript, display
 from .file_reader import register_filecomm
 from .svg import register_svgcomm
-
-svg_cache = {}
 
 def init():
 
     register_filecomm()
+    register_svgcomm()
 
     igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.min.js')
     igv_file = open(igv_filepath, 'r')
@@ -30,7 +25,6 @@ def init():
     nbfile = open(nb_filepath, 'r')
     nb_js = nbfile.read()
     display(Javascript(nb_js))
-
 
 
 class Browser(object):
@@ -50,13 +44,9 @@ class Browser(object):
 
         """
         Create an igv.js "Browser" instance on the front end.
+        Retain a DisplayHandle for later updates (e.g. to convert browser to SVG)
         """
-        self.d = display(display_id = True)
-        self.d.display(HTML("""<div id="%s"></div>""" % (self.igv_id)))
-
-        self.svg_cache = {}
-        register_svgcomm(self.d)
-
+        self.d = display(HTML("""<div id="%s"></div>""" % (self.igv_id)), display_id=id)
 
         self._send({
             "id": self.igv_id,
@@ -119,15 +109,12 @@ class Browser(object):
             "command": "zoomOut"
         })
 
-    def get_svg(self):
-        svg_id = self._gen_id()
+    def to_svg(self):
         self._send({
             "id": self.igv_id,
-            "command": "getSvg",
-            "data": svg_id
+            "command": "toSVG",
+            "data": self.igv_id
         })
-
-
 
     def _send(self, msg):
         javascript = """window.igv.MessageHandler.on(%s)""" % (json.dumps(msg))
@@ -136,5 +123,3 @@ class Browser(object):
 
     def _gen_id(self):
         return 'jb_' + str(random.randint(1, 10000000))
-
-
