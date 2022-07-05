@@ -97,7 +97,7 @@ be loaded by URL).  The ```path``` properties are useful for:
  | indexURL | indexPath |
  | fastaURL | fastaPath |
  | cytobandURL | cytobandPath |
- | aliasURL | aliasPATH | 
+ | aliasURL | aliasPath | 
 
 
 For Jupyter servers (Notebook and Lab), local files can be also be loaded via the url property if the file is in the Jupyter 
