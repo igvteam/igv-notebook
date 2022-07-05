@@ -20,17 +20,11 @@
     }
 
     async function toSVG(displayID, svg) {
-
         if (isNotebook) {
             svgComm.send({
                 "display_id": displayID,
                 "svg": svg
             })
-        } else if (isColab) {
-            await google.colab.kernel.invokeFunction(
-                'ToSVG', // The callback name.
-                [displayID, svg], // The arguments.
-                {})
         }
     }
 
@@ -63,7 +57,7 @@
 
                                 const container = document.getElementById(browserID)  // <= created from python
 
-                                if (isColab || isNotebook) {
+                                if (isNotebook) {
                                     const toSVGButton = {
                                         label: "To SVG",
                                         callback: (browser) => {
