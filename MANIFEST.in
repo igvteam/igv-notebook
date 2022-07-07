@@ -1,3 +1,4 @@
+include VERSION
 include igv_notebook/*
 recursive-include igv_notebook *.js
 recursive-include igv_notebook *.css

@@ -3,9 +3,12 @@ import setuptools
 with open("README.md", "r") as fh:
     longdescription =  fh.read()
 
+with open('VERSION') as version_file:
+    version = version_file.read().strip()
+
 setuptools.setup(name='igv-notebook',
                  packages=['igv_notebook'],
-                 version='0.3.1',
+                 version=version,
                  description='Package for embedding the igv.js genome visualization in IPython notebooks',
                  long_description=longdescription,
                  long_description_content_type="text/markdown",
@@ -21,5 +24,5 @@ setuptools.setup(name='igv-notebook',
                      'Programming Language :: Python',
                      'Framework :: IPython',
                  ],
-                 package_data={'igv_notebook': ['js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.min.js']},
+                 package_data={'igv_notebook': ['VERSION', 'js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.min.js']},
                  )
