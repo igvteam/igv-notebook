@@ -259,5 +259,12 @@ python setup.py build
 
 ## Release Notes
 
-[https://github.com/igvteam/igv-notebook/releases](https://github.com/igvteam/igv-notebook/releases)
+### 0.3.1
+
+* Change to ```browser.to_svg()``` function to support Python 3.6.  See #10 
+* Add ```igv_notebook.version()``` function.
+
+### 0.3.0
+
+* Add ```browser.to_svg()``` function to convert igv instance to static SVG image (Jupyter Notebook only).  See #8
 
