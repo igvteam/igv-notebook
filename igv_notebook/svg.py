@@ -17,6 +17,6 @@ def register_svgcomm():
 
             markup = HTML("""<div> <div style="font-size: small;">%s</div> <div style="margin-top:10px;border:solid #ddd;">%s</div></div>""" % (locus, svg))
 
-            update_display(markup, display_id = display_id, clear=True)
+            update_display(markup, display_id = display_id)
 
     get_ipython().kernel.comm_manager.register_target('svg', target_func)
