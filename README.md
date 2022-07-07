@@ -261,10 +261,10 @@ python setup.py build
 
 ### 0.3.1
 
-* Change to ```browser.to_svg()``` function to support Python 3.6.  See #10 
+* Change to ```browser.to_svg()``` function to support Python 3.6.
 * Add ```igv_notebook.version()``` function.
 
 ### 0.3.0
 
-* Add ```browser.to_svg()``` function to convert igv instance to static SVG image (Jupyter Notebook only).  See #8
+* Add ```browser.to_svg()``` function to convert igv instance to static SVG image (Jupyter Notebook only).
 
