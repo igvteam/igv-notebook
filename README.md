@@ -63,6 +63,16 @@ igv_notebook.init()
 For a Jupyter notebook this should be done once per notebook.   Colab notebooks display output in a sandboxed iFrame 
 for each cell, so these steps must be repeated for each cell in which  igv-notebook is used.
 
+
+### Version
+
+To verify the currently installed version (versions > 0.3.1 only)
+
+```python
+igv_notebook.version()
+```
+
+
 ### Browser creation
 
 The Browser initializer takes a configuration dictionary which is converted to JSON and passed to the igv.js
@@ -72,6 +82,8 @@ createBrowser function. The configuration options are described in the
 **Example:**
 
 ```python
+import igv_notebook
+igv_notebook.init()
 b = igv_notebook.Browser(
     {
         "genome": "hg19",
