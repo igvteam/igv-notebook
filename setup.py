@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(name='igv-notebook',
                  packages=['igv_notebook'],
-                 version='0.3.0',
+                 version='0.3.1',
                  description='Package for embedding the igv.js genome visualization in IPython notebooks',
                  long_description=longdescription,
                  long_description_content_type="text/markdown",
