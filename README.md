@@ -4,7 +4,7 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?urlpath=lab/tree/examples)  _**JupyterLab**_
 
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)    _**Google Colab**_
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1-4P_r07Dq-WxaOVUevlbHvVhC9Y11FWC?usp=sharing)    _**Google Colab**_
 
 [![PyPI](https://img.shields.io/pypi/v/igv-notebook?label=pypi%20package)](https://pypi.org/project/igv-notebook/)
 
@@ -26,7 +26,7 @@ The main differences between igv-notebook and these other projects are:
 * igv-notebook is a Python package, while the projects listed above are Jupyter extensions;
 * igv-notebook works with Google Colab, in addition to Jupyter and JupyterLab; and 
 * igv-notebook supports loading data files from any location on the local or mounted file system when used with Jupyter Notebook or 
-Google Colab.
+Google Colab.  **_NOTE_**: General local file paths do not work with JupyterLab, for JupyterLab the files must be in the JupyterLab file tree.
 
 
 ### Examples
@@ -66,12 +66,21 @@ for each cell, so these steps must be repeated for each cell in which  igv-noteb
 
 ### Version
 
-To verify the currently installed version (versions > 0.3.1 only)
+To verify the currently installed igv-notebook version (versions > 0.3.1 only)
 
 ```python
 igv_notebook.version()
 ```
 
+### IGV Version
+
+To verify the current version of igv.js (igv-notebook versions > 1.0,0 only)
+
+```python
+import igv_notebook
+
+igv_notebook.igv_version()
+```
 
 ### Browser creation
 
@@ -84,7 +93,7 @@ createBrowser function. The configuration options are described in the
 ```python
 import igv_notebook
 igv_notebook.init()
-b = igv_notebook.Browser(
+igv_browser = igv_notebook.Browser(
     {
         "genome": "hg19",
         "locus": "chr22:24,376,166-24,376,456"
@@ -121,7 +130,7 @@ the file, obtainable through the JupyterLab UI, as the URL for igv.
 
 ### Tracks
 
-To load a track, pass a track configuration object to ```b.load_track()```. Track configuration
+To load a track, pass a track configuration object to ```igv_browser.load_track()```. Track configuration
 objects are described in the [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Tracks-2.0), however
 see the note on _URLs and paths_ above. The configuration object will be converted to JSON and passed to the igv.js browser instance.
 
@@ -133,7 +142,7 @@ Data for the track can be loaded by URL, file path, or passed directly as an arr
 Local file - Jupyter. URL relative to the location of the notebook 
 
 ```python
-b.load_track(
+igv_browser.load_track(
     {
         "name": "Local BAM",
         "url": "data/gstt1_sample.bam",
@@ -147,7 +156,7 @@ b.load_track(
 Local file - Jupyter.  URL relative to root of Jupyter file tree
 
 ```python
-b.load_track(
+igv_browser.load_track(
     {
         "name": "Local BAM",
         "url": "/examples/data/gstt1_sample.bam",
@@ -161,7 +170,7 @@ b.load_track(
 Local file - Jupyter.  Absolute file path, potentially outside the Jupyter file tree.  Note the use of ```path``` and ```indexPath```.
 
 ```python
-b.load_track(
+igv_browser.load_track(
     {
         "name": "Local BAM",
         "path": "/any_path_you_like/data/gstt1_sample.bam",
@@ -177,7 +186,7 @@ b.load_track(
 Local file - Colab.  In Colab files are loaded by file path.
 
 ```python
-b.load_track(
+igv_browser.load_track(
     {
         "name": "Local BAM",
         "path": "/content/igv-notebook/examples/data/gstt1_sample.bam",
@@ -190,7 +199,7 @@ b.load_track(
 Remote file - Jupyter.   
 
 ```python
-b.load_track(
+igv_browser.load_track(
     {
         "name": "BAM",
         "url": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam",
@@ -208,7 +217,7 @@ b.load_track(
 Jump to a specific genomic range
 
 ```python
-b.search('chr1:3000-4000')
+igv_browser.search('chr1:3000-4000')
 
 ```
 
@@ -218,44 +227,59 @@ track with the "searchable" property set to true (see [igv.js documentation](htt
 
 
 ```python
-b.search('myc')
+igv_browser.search('myc')
 
 ```
 
 Zoom in by a factor of 2
 
 ```python
-b.zoom_in()
+igv_browser.zoom_in()
 ```
 
 Zoom out by a factor of 2
 
 ```python
-b.zoom_out()
+igv_browser.zoom_out()
 ```
 
-### SVG conversion
+### SVG conversion - Jupyter Notebook only
 
-For Jupyter Notebook only, the browser function ```to_svg()``` will convert an igv.js instance to a static SVG image representing its current state.  This is useful when converting the notebook to formats such as HTML and PDF.   This function can also be invoked from the "To SVG" button on the igv.js command bar.
+To convert the current igv view to a static SVG image 
 
 ```python
-b.to_svg()
+igv_browser.to_svg()
+```
+
+This action can also be invoked with the "To SVG" button on the igv.js command bar.  This is useful when converting 
+the notebook to formats such as HTML and PDF.  
+
+
+**Note**: This action is not reversible.  
+
+```python
+igv_browser.to_svg()
 ```
 
 ## Development 
 
-requires python >= 3.6.4
+requires python >= 3.9.1
 
-Development install
+### Development install
 
 ```bash
 pip install -e .
 ```
 
-Build 
+### Build 
 ```bash
 python setup.py build  
 ```
+
+### Updating igv.js version
+
+1. Edit VERSION_IGV - enter igv.js version with no line feed.  Visit [npmjs.com](https://www.npmjs.com/package/igv) to find latest version
+2. Run ```python updateIGV.py``` 
 
 ## Release Notes
 

@@ -1,4 +1,4 @@
-##Development notes
+## Development notes
 
 #### Installing into a conda environment:
 
@@ -38,7 +38,8 @@ python -m twine upload dist/*
 pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple igv_notebook
 ```
 
+#### Updating igv.js version
 
-### Example Notebook
+1. Edit VERSION_IGV - enter igv.js version with no line feed.  Visit [npmjs.com](https://www.npmjs.com/package/igv) to find latest version
+2. Run ```python updateIGV.py```
 
-[Colab example](https://colab.research.google.com/drive/1ebC3QUJiDGNUON34V2O99cGIdc11D3D5?usp=sharing)
