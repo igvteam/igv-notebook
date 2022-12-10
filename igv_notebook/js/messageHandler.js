@@ -20,7 +20,7 @@
     }
 
     async function toSVG(displayID, locus, svg) {
-        console.log(isNotebook + " " + locus)
+        //console.log(isNotebook + " " + locus)
         if (isNotebook) {
             svgComm.send({
                 "display_id": displayID,
@@ -45,6 +45,15 @@
         }
 
         async processQueue() {
+
+            const convertTrackData = (data) => {
+                convert(data)
+                convert(data, "index")
+                if (!data.indexURL) {
+                    data.indexed = false
+                }
+            }
+
             if (!this.processing) {
                 this.processing = true
                 while (!this.messageQueue.isEmpty()) {
@@ -58,6 +67,8 @@
                             case "createBrowser":
 
                                 const container = document.getElementById(browserID)  // <= created from python
+
+                                data.sync = true
 
                                 if (isNotebook) {
                                     const toSVGButton = {
@@ -101,13 +112,21 @@
                                 break
 
                             case "loadTrack":
-                                convert(data)
-                                convert(data, "index")
-                                if (!data.indexURL) {
-                                    data.indexed = false
-                                }
+                                convertTrackData(data)
                                 await browser.loadTrack(data)
+                                break
 
+                            case "loadROI":
+                                if(Array.isArray(data)) {
+                                    data.map(convertTrackData)
+                                } else {
+                                    convertTrackData(data)
+                                }
+                                await browser.loadROI(data)
+                                break
+
+                            case "clearROIs":
+                                await browser.clearROIs()
                                 break
 
                             case "search":

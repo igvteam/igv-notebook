@@ -24,5 +24,5 @@ setuptools.setup(name='igv-notebook',
                      'Programming Language :: Python',
                      'Framework :: IPython',
                  ],
-                 package_data={'igv_notebook': ['VERSION', 'js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.min.js']},
+                 package_data={'igv_notebook': ['VERSION', 'VERSION_IGV', 'js/messageHandler.js', 'js/localNotebookFile.js', 'js/igv.min.js']},
                  )
