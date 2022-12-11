@@ -11,7 +11,7 @@
 ============
 
 igv-notebook is a Python package which wraps [igv.js](https://github.com/igvteam/igv.js) for embedding in an IPython notebook.
-Both Jupyter and Google Colab runtimes are supported. 
+Both Jupyter and Google Colab platforms are supported. 
 
 ### Related projects
 
@@ -46,13 +46,13 @@ Typical usage proceeds as follow
 4. Add tracks to browser 
 5. Navigate to loci of interest
 
-### Installation
+**Installation**
 
 ```bash
 pip install igv-notebook
 ```
 
-### Initialization
+**Initialization**
 
 After installing, import and intialize igv_notebook as follows. 
 
@@ -61,26 +61,8 @@ import igv_notebook
 igv_notebook.init()
 ```
 For a Jupyter notebook this should be done once per notebook.   Colab notebooks display output in a sandboxed iFrame 
-for each cell, so these steps must be repeated for each cell in which  igv-notebook is used.
-
-
-### Version
-
-To verify the currently installed igv-notebook version (versions > 0.3.1 only)
-
-```python
-igv_notebook.version()
-```
-
-### IGV Version
-
-To verify the current version of igv.js (igv-notebook versions > 1.0,0 only)
-
-```python
-import igv_notebook
-
-igv_notebook.igv_version()
-```
+for each cell, so initialization must be repeated for each cell in which  igv-notebook is used.
+`
 
 ### Browser creation
 
@@ -93,10 +75,25 @@ createBrowser function. The configuration options are described in the
 ```python
 import igv_notebook
 igv_notebook.init()
-igv_browser = igv_notebook.Browser(
+igv_browser= igv_notebook.Browser(
     {
         "genome": "hg19",
-        "locus": "chr22:24,376,166-24,376,456"
+        "locus": "chr22:24,376,166-24,376,456",
+        "tracks": [{
+            "name": "BAM",
+            "url": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam",
+            "indexURL": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam.bai",
+            "format": "bam",
+            "type": "alignment"
+        }],
+        "roi": [
+            {
+                "name": "ROI set 1",
+                "url": "https://s3.amazonaws.com/igv.org.test/data/roi/roi_bed_1.bed",
+                "indexed": False,
+                "color": "rgba(94,255,1,0.25)"
+            }
+        ]
     }
 )
 ```
@@ -106,7 +103,7 @@ igv_browser = igv_notebook.Browser(
 Configuration objects for igv.js have properties to specify URLs to files for data and indexes.  These properties are 
 supported in igv-notebook, however igv-notebook also provides equivalent ```path``` properties for specfiying paths to 
 local files when used with Jupyter Notebook or Colab.  (_**Note**_: The ```path``` properties cannot be used with JupyterLab, however local files can
-be loaded by URL).  The ```path``` properties are useful for:
+be loaded by URL if they are in the Jupyter file tree).  The ```path``` properties are useful for:
 
 * loading data in a Colab notebook from the local Colab file system or a mounted Google Drive; and
 * loading data in Jupyter Notebook from the local file system that is outside the Jupyter file tree. 
@@ -211,8 +208,45 @@ igv_browser.load_track(
 ```
 
 
+### API
 
-### Navigation
+Most IGV options can be specified in the initial browser configuration, including specifying genome, locus, tracks, and regions-of-interest.  Additional methods are provided to perform actions on the browser post-creation.  These are described below
+
+#### Load a track**
+
+To load a track
+
+```
+igv_browser.load_track(track_config)
+```
+
+See example track configurations above.   Also [igv.js  wiki](https://github.com/igvteam/igv.js/wiki/Tracks-2.0)
+
+
+Example:
+
+```python
+igv_browser.load_track(
+    {
+        "name": "Local BAM",
+        "url": "data/gstt1_sample.bam",
+        "indexURL": "data/gstt1_sample.bam.bai",
+        "format": "bam",
+        "type": "alignment"
+    })
+
+```
+
+#### Load regions of interest**  (version >= 0.4.0)
+
+Regions-of-interest are overlays marking genomic ranges of interest.  They are defined by track configurations, often backed by a "bed" file, and usually with a translucent color.  These can be specified at browser creation with the "roi" property, or loaded afterwards with the ```loadROIs`` function.  This function takes an array of track configuration objects.   See the notebook examples/ROI.ipynb for example usage.
+
+```
+igv_browser.loadROIs([roi_configs])
+```
+
+
+#### Navigation
 
 Jump to a specific genomic range
 
@@ -255,10 +289,21 @@ This action can also be invoked with the "To SVG" button on the igv.js command b
 the notebook to formats such as HTML and PDF.  
 
 
-**Note**: This action is not reversible.  
+**Note: This action is not reversible.**
+
+
+#### Version
+
+To verify the currently installed igv-notebook version (versions >= 0.3.1 only)
 
 ```python
-igv_browser.to_svg()
+igv_notebook.version()
+```
+
+To verify the current version of igv.js (igv-notebook versions >= 0.4.0 only)
+
+```python
+igv_notebook.igv_version()
 ```
 
 ## Development 
@@ -283,12 +328,21 @@ python setup.py build
 
 ## Release Notes
 
-### 0.3.1
+**0.4.1**
 
-* Change to ```browser.to_svg()``` function to support Python 3.6.
+* Update documentation
+
+**0.4.0**
+
+* Add support for regions-of-interest
+* Add ```igv_notebook.igv_version()``` function.
+
+**0.3.1**
+
+* Update ```browser.to_svg()``` function to support Python 3.6.
 * Add ```igv_notebook.version()``` function.
 
-### 0.3.0
+**0.3.0**
 
 * Add ```browser.to_svg()``` function to convert igv instance to static SVG image (Jupyter Notebook only).
 
