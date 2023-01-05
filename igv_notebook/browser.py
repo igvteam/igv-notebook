@@ -36,7 +36,8 @@ def init(version = None):
 def igv_version():
     global _igv_version
     if _igv_version is None:
-        with open('../VERSION_IGV') as version_file:
+        filepath = os.path.join(os.path.dirname(__file__), 'VERSION_IGV')
+        with open(filepath) as version_file:
             _igv_version = version_file.read().strip()
     return _igv_version
 

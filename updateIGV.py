@@ -4,7 +4,7 @@ Script to update the igv.js version.
 
 import requests
 
-with open('VERSION_IGV') as version_file:
+with open('igv_notebook/VERSION_IGV') as version_file:
     version = version_file.read().strip()
 
 remote_url = "https://cdn.jsdelivr.net/npm/igv@" + version + "/dist/igv.min.js"

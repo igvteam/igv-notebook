@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     longdescription =  fh.read()
 
-with open('VERSION') as version_file:
+with open('igv_notebook/VERSION') as version_file:
     version = version_file.read().strip()
 
 setuptools.setup(name='igv-notebook',

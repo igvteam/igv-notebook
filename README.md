@@ -328,6 +328,10 @@ python setup.py build
 
 ## Release Notes
 
+**0.4.3**
+
+* Fix file-not-found error with version() and igv_version() functions
+
 **0.4.1**
 
 * Update documentation
