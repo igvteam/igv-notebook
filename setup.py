@@ -16,6 +16,7 @@ setuptools.setup(name='igv-notebook',
                  author='Jim Robinson',
                  url='https://github.com/igvteam/igv-notebook',
                  keywords=['igv', 'bioinformatics', 'genomics', 'visualization', 'ipython', 'jupyter'],
+                 install_requires=['ipykernel', 'ipython', 'requests'],
                  classifiers=[
                      'Development Status :: 4 - Beta',
                      'Intended Audience :: Science/Research',
