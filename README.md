@@ -328,6 +328,11 @@ python setup.py build
 
 ## Release Notes
 
+**0.4.4**
+
+* Add missing requirements to setup.py
+* Update igv.js version to 2.13.10
+
 **0.4.3**
 
 * Fix file-not-found error with version() and igv_version() functions
