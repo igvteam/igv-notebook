@@ -1,5 +1,7 @@
 '''
 Script to update the igv.js version.
+* Set version in igv_notebook/VERSION_IGV
+* Run this script
 '''
 
 import requests

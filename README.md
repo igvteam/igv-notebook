@@ -328,6 +328,10 @@ python setup.py build
 
 ## Release Notes
 
+**0.4.5**
+
+* Fix path/url problems when using JupyterLab
+
 **0.4.4**
 
 * Add missing requirements to setup.py
