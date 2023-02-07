@@ -117,7 +117,7 @@
                                 break
 
                             case "loadROI":
-                                if(Array.isArray(data)) {
+                                if (Array.isArray(data)) {
                                     data.map(convertTrackData)
                                 } else {
                                     convertTrackData(data)
@@ -225,7 +225,9 @@
                 // URL is relative to notebook
                 return encodeURI(`${location.origin}${baseURL}files/${notebookDir}${url}`)
             }
-        } else if (pageURL.includes("/lab/")) {
+        } else if (pageURL.includes("/lab")) {
+
+            console.log("Jupyter lab")
             // Jupyter Lab
 
             // Examples
@@ -235,7 +237,7 @@
             // https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/lab/tree/examples/BamFiles.ipynb
             //    => https://hub.gke2.mybinder.org/user/igvteam-igv-notebook-5ivkyktt/files/examples/data/gstt1_sample.bam
 
-            const baseIndex = pageURL.indexOf("/lab/")
+            const baseIndex = pageURL.indexOf("/lab")
             const baseURL = pageURL.substring(0, baseIndex)
 
             if (url.startsWith("/")) {
