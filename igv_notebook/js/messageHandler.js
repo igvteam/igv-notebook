@@ -116,14 +116,15 @@
                                 customButtonDiv.appendChild(toJsonButton)
 
                                 const shareButton = document.createElement('button')
-                                shareButton.innerText = "Open in IGV-Web"
+                                shareButton.innerText = "Show IGV-Web Link"
                                 shareButton.style="margin-right:5px"
-                                shareButton.addEventListener('click', (evt) => {
+                                shareButton.addEventListener('click', async (evt) => {
                                     const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
-                                    window.open(sessionURL, 'igvWeb')
+                                    //window.open(sessionURL, 'igvWeb')
 
+                                    const shortURL = await shortenURL(sessionURL)
                                     const a = document.createElement('a')
-                                    a.href = sessionURL
+                                    a.href = shortURL
                                     a.target="igvWeb"
                                     a.innerText = "Link to IGV-Web"
                                     customButtonDiv.insertBefore(a, customButtonDiv.childNodes[2])
@@ -343,6 +344,17 @@
         document.body.appendChild(element)
         element.click()
         document.body.removeChild(element)
+    }
+
+    async function shortenURL(url) {
+        const endpoint = "https://2et6uxfezb.execute-api.us-east-1.amazonaws.com/dev/tinyurl/"
+        const enc = encodeURIComponent(url)
+        const response = await fetch(`${endpoint}${enc}`)
+        if (response.ok) {
+            return response.text()
+        } else {
+            throw new Error(response.statusText)
+        }
     }
 
     console.log("igv.MessageHandler installed")
