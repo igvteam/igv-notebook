@@ -68,19 +68,11 @@
 
                                 const container = document.getElementById(browserID)  // <= created from python
 
-                                data.sync = true
+                                // custom button bar
+                                const customButtonDiv = document.createElement('div')
+                                container.appendChild(customButtonDiv)
 
-                                if (isNotebook) {
-                                    const toSVGButton = {
-                                        label: "To SVG",
-                                        callback: (browser) => {
-                                            const locus = browser.referenceFrameList.map(rf => rf.getLocusString()).join(' ')
-                                            const svg = browser.toSVG()
-                                            toSVG(browserID, locus, svg)
-                                        }
-                                    }
-                                    data.customButtons = [toSVGButton]
-                                }
+                                data.sync = true
 
                                 if (data.reference) {
                                     for (let pre of ["fasta", "index", "cytoband", "compressedIndex", "alias"]) {
@@ -109,6 +101,47 @@
 
                                 const newBrowser = await igv.createBrowser(container, data)
                                 this.browserCache.set(browserID, newBrowser)
+
+                                // Add igv-notebook button bar
+                                const toJsonButton = document.createElement('button')
+                                toJsonButton.innerText = "Save Session"
+                                toJsonButton.style="margin-right:5px"
+                                toJsonButton.addEventListener('click', (evt) => {
+                                    const fn = prompt("Filename:", "session.json")
+                                    if(fn) {
+                                        const json = newBrowser.toJSON()
+                                        download(fn, json)
+                                    }
+                                })
+                                customButtonDiv.appendChild(toJsonButton)
+
+                                const shareButton = document.createElement('button')
+                                shareButton.innerText = "Open in IGV-Web"
+                                shareButton.style="margin-right:5px"
+                                shareButton.addEventListener('click', (evt) => {
+                                    const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
+                                    window.open(sessionURL, 'igvWeb')
+
+                                    const a = document.createElement('a')
+                                    a.href = sessionURL
+                                    a.target="igvWeb"
+                                    a.innerText = "Link to IGV-Web"
+                                    customButtonDiv.insertBefore(a, customButtonDiv.childNodes[2])
+                                })
+                                customButtonDiv.appendChild(shareButton)
+
+                                if (isNotebook) {
+                                    const toSVGButton = document.createElement('button')
+                                    toSVGButton.innerText = "To SVG"
+                                    toSVGButton.style="float:right"
+                                    toSVGButton.addEventListener('click', (evt) => {
+                                        const locus = newBrowser.referenceFrameList.map(rf => rf.getLocusString()).join(' ')
+                                        const svg = newBrowser.toSVG()
+                                        toSVG(browserID, locus, svg)
+                                    })
+                                    customButtonDiv.appendChild(toSVGButton)
+                                }
+
                                 break
 
                             case "loadTrack":
@@ -298,6 +331,19 @@
     }
 
     window.igv.MessageHandler = new MessageHandler()
+
+    function download(filename, text) {
+
+        const data = URL.createObjectURL(new Blob([text], {type: "application/text"}))
+
+        const element = document.createElement('a')
+        element.setAttribute('href', data)
+        element.setAttribute('download', filename)
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+    }
 
     console.log("igv.MessageHandler installed")
 
