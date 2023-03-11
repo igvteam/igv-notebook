@@ -115,7 +115,8 @@
                                     }
                                     if (fn) {
                                         const json = newBrowser.toJSON()
-                                        download(fn, json)
+                                        const jsonString = JSON.stringify(json, null, '\t');
+                                        download(fn, jsonString)
                                     }
                                 })
                                 customButtonDiv.appendChild(toJsonButton)
@@ -340,8 +341,7 @@
 
     function download(filename, text) {
 
-        const data = URL.createObjectURL(new Blob([text], {type: "application/text"}))
-
+        const data = URL.createObjectURL(new Blob([text], {type: "application/octet-stream"}));
         const element = document.createElement('a')
         element.setAttribute('href', data)
         element.setAttribute('download', filename)
