@@ -70,6 +70,7 @@
 
                                 // custom button bar
                                 const customButtonDiv = document.createElement('div')
+                                customButtonDiv.style = `background: #f3f3f3;padding: 5px;border-color: #bfbfbf;border-style: solid;border-width: thin;border-radius: 3px;`
                                 container.appendChild(customButtonDiv)
 
                                 data.sync = true
@@ -115,7 +116,7 @@
                                     }
                                     if (fn) {
                                         const json = newBrowser.toJSON()
-                                        const jsonString = JSON.stringify(json, null, '\t');
+                                        const jsonString = JSON.stringify(json, null, '\t')
                                         download(fn, jsonString)
                                     }
                                 })
@@ -341,7 +342,7 @@
 
     function download(filename, text) {
 
-        const data = URL.createObjectURL(new Blob([text], {type: "application/octet-stream"}));
+        const data = URL.createObjectURL(new Blob([text], {type: "application/octet-stream"}))
         const element = document.createElement('a')
         element.setAttribute('href', data)
         element.setAttribute('download', filename)
