@@ -105,10 +105,15 @@
                                 // Add igv-notebook button bar
                                 const toJsonButton = document.createElement('button')
                                 toJsonButton.innerText = "Save Session"
-                                toJsonButton.style="margin-right:5px"
+                                toJsonButton.style = "margin-right:5px"
                                 toJsonButton.addEventListener('click', (evt) => {
-                                    const fn = prompt("Filename:", "session.json")
-                                    if(fn) {
+                                    let fn
+                                    if (isNotebook) {
+                                        fn = prompt("Filename:", "session.json")
+                                    } else {
+                                        fn = "session.json"
+                                    }
+                                    if (fn) {
                                         const json = newBrowser.toJSON()
                                         download(fn, json)
                                     }
@@ -117,7 +122,7 @@
 
                                 const shareButton = document.createElement('button')
                                 shareButton.innerText = "Show IGV-Web Link"
-                                shareButton.style="margin-right:5px"
+                                shareButton.style = "margin-right:5px"
                                 shareButton.addEventListener('click', async (evt) => {
                                     const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
                                     //window.open(sessionURL, 'igvWeb')
@@ -125,7 +130,7 @@
                                     const shortURL = await shortenURL(sessionURL)
                                     const a = document.createElement('a')
                                     a.href = shortURL
-                                    a.target="igvWeb"
+                                    a.target = "igvWeb"
                                     a.innerText = "Link to IGV-Web"
                                     customButtonDiv.insertBefore(a, customButtonDiv.childNodes[2])
                                 })
@@ -134,7 +139,7 @@
                                 if (isNotebook) {
                                     const toSVGButton = document.createElement('button')
                                     toSVGButton.innerText = "To SVG"
-                                    toSVGButton.style="float:right"
+                                    toSVGButton.style = "float:right"
                                     toSVGButton.addEventListener('click', (evt) => {
                                         const locus = newBrowser.referenceFrameList.map(rf => rf.getLocusString()).join(' ')
                                         const svg = newBrowser.toSVG()
