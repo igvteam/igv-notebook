@@ -122,21 +122,23 @@
                                 })
                                 customButtonDiv.appendChild(toJsonButton)
 
+                                const webLinkNode = document.createElement('a')
+                                webLinkNode.target = "igvWeb"
+                                webLinkNode.innerText = "Link to IGV-Web"
+                                webLinkNode.style.display = "none"
+
                                 const shareButton = document.createElement('button')
                                 shareButton.innerText = "Show IGV-Web Link"
                                 shareButton.style = "margin-right:5px"
                                 shareButton.addEventListener('click', async (evt) => {
                                     const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
-                                    //window.open(sessionURL, 'igvWeb')
-
-                                    const shortURL = await shortenURL(sessionURL)
-                                    const a = document.createElement('a')
-                                    a.href = shortURL
-                                    a.target = "igvWeb"
-                                    a.innerText = "Link to IGV-Web"
-                                    customButtonDiv.insertBefore(a, customButtonDiv.childNodes[2])
+                                     const shortURL = await shortenURL(sessionURL)
+                                    webLinkNode.setAttribute("href", shortURL)
+                                    webLinkNode.style.display = "inline-block"
+                                    shareButton.innerText = "Update IGV-Web Link"
                                 })
                                 customButtonDiv.appendChild(shareButton)
+                                customButtonDiv.appendChild(webLinkNode)
 
                                 if (isNotebook) {
                                     const toSVGButton = document.createElement('button')
