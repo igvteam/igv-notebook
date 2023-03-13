@@ -59,6 +59,21 @@
         }
     }
 
+    /**
+     * Return true if the sessionJson object contains only absolute URLs to resources
+     */
+    function safeToWeblink(sessionJson) {
+        const unsafe = (url) => typeof url.startsWith != 'function' || !url.startsWith("http")
+        if (sessionJson.reference) {
+            if (unsafe(sessionJson.reference.fastaURL)) return false
+        }
+        if (sessionJson.tracks) {
+            const urls = sessionJson.tracks.filter(t => t.url).map(t => t.url)
+            if (urls.some(unsafe)) return false
+        }
+        return true
+    }
+
     class MessageHandler {
 
         constructor() {
@@ -134,11 +149,18 @@
                                 shareButton.innerText = "Show IGV-Web Link"
                                 shareButton.style = "margin-right:5px"
                                 shareButton.addEventListener('click', async (evt) => {
-                                    const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
-                                     const shortURL = await shortenURL(sessionURL)
-                                    webLinkNode.setAttribute("href", shortURL)
-                                    webLinkNode.style.display = "inline-block"
-                                    shareButton.innerText = "Update IGV-Web Link"
+
+                                    if (safeToWeblink(newBrowser.toJSON())) {
+                                        const sessionURL = `https://igv.org/app?sessionURL=blob:${newBrowser.compressedSession()}`
+                                        const shortURL = await shortenURL(sessionURL)
+                                        webLinkNode.innerText = "Link to IGV-Web"
+                                        webLinkNode.setAttribute("href", shortURL)
+                                        webLinkNode.style.display = "inline-block"
+                                        shareButton.innerText = "Update IGV-Web Link"
+                                    } else {
+                                        webLinkNode.innerText = "Cannot link -- non URL resources used"
+                                        webLinkNode.style.display = "inline-block"
+                                    }
                                 })
                                 customButtonDiv.appendChild(shareButton)
                                 customButtonDiv.appendChild(webLinkNode)

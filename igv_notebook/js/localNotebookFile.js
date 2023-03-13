@@ -44,6 +44,7 @@
     class JupyterLocalFile {
 
         constructor({path, name, start, end}) {
+            this.type = 'JupyterLocalFile'
             this.path = path
             this.name = name || path
             this.start = start
@@ -127,6 +128,7 @@
     class ColabLocalFile {
 
         constructor({path, name, start, end}) {
+            this.type = 'ColabLocalFile'
             this.path = path
             this.name = name || path
             this.start = start
