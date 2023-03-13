@@ -1,0 +1,20 @@
+{
+  "reference": {
+    "id": "hg19",
+    "name": "Human (CRCh37/hg19)",
+    "fastaURL": "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg19/hg19.fasta",
+    "indexURL": "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg19/hg19.fasta.fai",
+    "cytobandURL": "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg19/cytoBand.txt"
+  },
+  "locus": "chr8:128,746,315-128,755,680",
+  "tracks": [
+    {
+      "url": "https://www.encodeproject.org/files/ENCFF000ATR/@@download/ENCFF000ATR.bigWig",
+      "color": "#018448",
+      "name": "GM12878 H3K4me3  signal ENCSR000AKA",
+      "format": "bigwig",
+      "type": "wig",
+      "filename": "ENCFF000ATR.bigWig"
+    }
+  ]
+}

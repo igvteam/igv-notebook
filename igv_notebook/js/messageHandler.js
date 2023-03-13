@@ -32,6 +32,33 @@
 
     console.log("Installing IGVMessageHandler")
 
+    function convertUrlsAndPaths(session) {
+        if (session.reference) {
+            for (let pre of ["fasta", "index", "cytoband", "compressedIndex", "alias"]) {
+                convert(session.reference, pre)
+            }
+            if (session.reference.tracks) {
+                for (let t of session.reference.tracks) {
+                    convert(t)
+                    convert(t, "index")
+                    if (!t.indexURL) {
+                        t.indexed = false
+                    }
+                }
+            }
+        }
+
+        if (session.tracks) {
+            for (let t of session.tracks) {
+                convert(t)
+                convert(t, "index")
+                if (!t.indexURL) {
+                    t.indexed = false
+                }
+            }
+        }
+    }
+
     class MessageHandler {
 
         constructor() {
@@ -74,31 +101,7 @@
                                 container.appendChild(customButtonDiv)
 
                                 data.sync = true
-
-                                if (data.reference) {
-                                    for (let pre of ["fasta", "index", "cytoband", "compressedIndex", "alias"]) {
-                                        convert(data.reference, pre)
-                                    }
-                                    if (data.reference.tracks) {
-                                        for (let t of data.reference.tracks) {
-                                            convert(t)
-                                            convert(t, "index")
-                                            if (!t.indexURL) {
-                                                t.indexed = false
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (data.tracks) {
-                                    for (let t of data.tracks) {
-                                        convert(t)
-                                        convert(t, "index")
-                                        if (!t.indexURL) {
-                                            t.indexed = false
-                                        }
-                                    }
-                                }
+                                convertUrlsAndPaths(data)
 
                                 const newBrowser = await igv.createBrowser(container, data)
                                 this.browserCache.set(browserID, newBrowser)
@@ -152,6 +155,11 @@
                                     customButtonDiv.appendChild(toSVGButton)
                                 }
 
+                                break
+
+                            case "loadSession":
+                                convertUrlsAndPaths(data)
+                                browser.loadSessionObject(data)
                                 break
 
                             case "loadTrack":
@@ -306,10 +314,10 @@
     function convert(config, prefix) {
         const urlProp = prefix ? prefix + "URL" : "url"
         const pathProp = prefix ? prefix + "Path" : "path"
-        if (config[urlProp]) {
-            config[urlProp] = convertURL(config[urlProp])
-        } else if (config[pathProp]) {
+        if (config[pathProp]) {
             config[urlProp] = createNotebookFile(config[pathProp])
+        } else if (config[urlProp]) {
+            config[urlProp] = convertURL(config[urlProp])
         }
     }
 

@@ -69,6 +69,40 @@ class Browser(object):
             "data": config
         })
 
+    def load_session(self,session=None, url=None, path=None ):
+
+        """
+        Load a session.  Corresponds to the igv.js Browser function loadSession (see https://github.com/igvteam/igv.js/wiki/Browser-Control-2.0#loadtrack).
+        :param url: A url to na igv session file
+        :param path: A local file path to an igv session file
+        :param json: A dictionary representing an igv session object
+        :return:
+        """
+
+       # Check for minimal requirements
+       # if isinstance(config, dict) == False:
+       #     if isinstance(config, str):
+       #         config = {"url": config}
+       #     else:
+       #         raise Exception("load_track parameter must be a dictionary or url (string) to a track data file")
+
+
+        if path is not None:
+            with open(path) as user_file:
+                session = json.load(user_file)
+
+        elif url is not None:
+            session = requests.get(url).json()
+
+        if session is not None:
+            self._send({
+                "id": self.igv_id,
+                "command": "loadSession",
+                "data": session
+            })
+
+
+
     def load_track(self, config):
         """
         Load a track.  Corresponds to the igv.js Browser function loadTrack (see https://github.com/igvteam/igv.js/wiki/Browser-Control-2.0#loadtrack).
@@ -89,6 +123,8 @@ class Browser(object):
             "command": "loadTrack",
             "data": config
         })
+
+
 
     def load_roi(self, config):
         """
