@@ -68,7 +68,7 @@ for each cell, so initialization must be repeated for each cell in which  igv-no
 
 The Browser initializer takes a configuration dictionary which is converted to JSON and passed to the igv.js
 createBrowser function. The configuration options are described in the
-[igv.js documentation](https://github.com/igvteam/igv.js/wiki/Browser-Configuration-2.0).
+[igv.js documentation](https://github.com/igvteam/igv.js/wiki/Browser-Creation).
 
 **Example:**
 
