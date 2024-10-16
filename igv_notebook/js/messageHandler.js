@@ -34,7 +34,8 @@
 
     function convertUrlsAndPaths(session) {
         if (session.reference) {
-            for (let pre of ["fasta", "index", "cytoband", "compressedIndex", "alias"]) {
+            for (let pre of ["fasta", "index", "cytoband", "cytobandBb", "compressedIndex", "alias", "aliasBb",
+            "twoBit", "twoBitBpt", "chromAliasBb", "chromSizes"]) {
                 convert(session.reference, pre)
             }
             if (session.reference.tracks) {
