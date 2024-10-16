@@ -23,10 +23,10 @@ Other projects enabling embedding igv.js in notebooks include
 
 The main differences between igv-notebook and these other projects are: 
 
-* igv-notebook is a Python package, while the projects listed above are Jupyter extensions;
+* igv-notebook is a "plain" Python package, while the projects listed above are Jupyter extensions;
 * igv-notebook works with Google Colab, in addition to Jupyter and JupyterLab; and 
 * igv-notebook supports loading data files from any location on the local or mounted file system when used with Jupyter Notebook or 
-Google Colab.  **_NOTE_**: General local file paths do not work with JupyterLab, for JupyterLab the files must be in the JupyterLab file tree.
+Google Colab.  **_NOTE_**: General local file paths do not work with JupyterLab, for JupyterLab local files must be in the JupyterLab file tree.
 
 
 ### Examples
@@ -210,7 +210,8 @@ igv_browser.load_track(
 
 ### API
 
-Most IGV options can be specified in the initial browser configuration, including specifying genome, locus, tracks, and regions-of-interest.  Additional methods are provided to perform actions on the browser post-creation.  These are described below
+Most IGV options can be specified in the initial browser configuration, including specifying genome, locus, tracks, and 
+regions-of-interest.  Additional methods are provided to perform actions on the IGV browser post-creation.  These are described below
 
 #### Load a track**
 
@@ -239,7 +240,10 @@ igv_browser.load_track(
 
 #### Load regions of interest**  (version >= 0.4.0)
 
-Regions-of-interest are overlays marking genomic ranges of interest.  They are defined by track configurations, often backed by a "bed" file, and usually with a translucent color.  These can be specified at browser creation with the "roi" property, or loaded afterwards with the ```loadROIs`` function.  This function takes an array of track configuration objects.   See the notebook examples/ROI.ipynb for example usage.
+Regions-of-interest are overlays marking genomic ranges of interest.  They are defined by track configurations, often 
+backed by a "bed" file, and usually with a translucent color.  These can be specified at browser creation with 
+the "roi" property, or loaded afterwards with the ```loadROIs`` function.  This function takes an array of track 
+configuration objects.   See the notebook examples/ROI.ipynb for example usage.
 
 ```
 igv_browser.loadROIs([roi_configs])
@@ -256,7 +260,7 @@ igv_browser.search('chr1:3000-4000')
 ```
 
 Jump to a specific gene. This uses the IGV search web service, which currently supports a limited number of 
-[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To customize the search, load a non-indexed annotation
+[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To extend or customize the search, load a non-indexed annotation
 track with the "searchable" property set to true (see [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Annotation-Track#configuration-options)).
 
 
@@ -286,10 +290,7 @@ igv_browser.to_svg()
 ```
 
 This action can also be invoked with the "To SVG" button on the igv.js command bar.  This is useful when converting 
-the notebook to formats such as HTML and PDF.  
-
-
-**Note: This action is not reversible.**
+the notebook to formats such as HTML and PDF. **Note: This action is not reversible.**
 
 
 #### Version
