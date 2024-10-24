@@ -109,16 +109,16 @@
                         switch (command) {
                             case "createBrowser":
 
-                                const container = document.getElementById(browserID)  // <= created from python
-
                                 // custom button bar
+                                const button_container = document.getElementById(`${browserID}_buttons`) // <= created from python
                                 const customButtonDiv = document.createElement('div')
                                 customButtonDiv.style = `background: #f3f3f3;padding: 5px;border-color: #bfbfbf;border-style: solid;border-width: thin;border-radius: 3px;`
-                                container.appendChild(customButtonDiv)
+                                button_container.appendChild(customButtonDiv)
 
                                 data.sync = true
                                 convertUrlsAndPaths(data)
 
+                                const container = document.getElementById(`${browserID}_igvcontainer`)  // <= created from python
                                 const newBrowser = await igv.createBrowser(container, data)
                                 this.browserCache.set(browserID, newBrowser)
 

@@ -15,7 +15,7 @@ def init(version = None):
     register_svgcomm()
 
     if version is None:
-        igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.min.js')
+        igv_filepath = os.path.join(os.path.dirname(__file__), 'js/igv.iife.js')
         igv_file = open(igv_filepath, 'r')
         igv_js = igv_file.read()
     else:
@@ -61,7 +61,8 @@ class Browser(object):
         Create an igv.js "Browser" instance on the front end.
         Retain a DisplayHandle for later updates (e.g. to convert browser to SVG)
         """
-        self.d = display(HTML("""<div id="%s"></div>""" % (self.igv_id)), display_id=id)
+
+        self.d = display(HTML(f'<div id="{self.igv_id}_buttons"></div><div id="{self.igv_id}_igvcontainer"></div>'), display_id=id)
 
         self._send({
             "id": self.igv_id,

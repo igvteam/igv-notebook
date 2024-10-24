@@ -38,8 +38,12 @@ python -m twine upload dist/*
 pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple igv_notebook
 ```
 
-#### Updating igv.js version
+#### Updating igv.js 
 
-1. Edit VERSION_IGV - enter igv.js version with no line feed.  Visit [npmjs.com](https://www.npmjs.com/package/igv) to find latest version
-2. Run ```python updateIGV.py```
+1. Clone the [igv.js project](https://github.com/igvteam/igv.js)
+2. Run `npm run build_iife`.  See the igv.js README for further build instructions
+3. Copy `dist/igv.iife.js` from the igv.js repository to `igv_notebook/js/igv.iife.js`
+4. Replace "var igv=" with "window.igv=" at start of file
+
+
 
