@@ -324,10 +324,17 @@ python setup.py build
 
 ### Updating igv.js version
 
-1. Edit VERSION_IGV - enter igv.js version with no line feed.  Visit [npmjs.com](https://www.npmjs.com/package/igv) to find latest version
-2. Run ```python updateIGV.py``` 
+1. Checkout igv.js github branch for the tag of interest (e.g. v3.1.4) [igv.js](https://github.com/igvteam/igv.js)
+2. From the igv.js repository route run ```npm run build_iife```
+3. Copy `igv.iife.js` from the igv.js dist directory to `igv_notebook/js`
+4. Edit `igv.iife.js` - replace ```var igv=``` with ```window.igv=``` at start of file.
+2. Update the file VERSION_IGV
 
 ## Release Notes
+
+**0.6.2**
+
+* Updates igv.js to version 3.1.4
 
 **0.5.2**
 
