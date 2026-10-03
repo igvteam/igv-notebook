@@ -81,15 +81,15 @@ igv_browser= igv_notebook.Browser(
         "locus": "chr22:24,376,166-24,376,456",
         "tracks": [{
             "name": "BAM",
-            "url": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam",
-            "indexURL": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam.bai",
+            "url": "https://github.com/igvteam/igv-notebook/raw/refs/heads/main/examples/data/gstt1_sample.bam",
+            "indexURL": "https://github.com/igvteam/igv-notebook/raw/refs/heads/main/examples/data/gstt1_sample.bam.bai",
             "format": "bam",
             "type": "alignment"
         }],
         "roi": [
             {
                 "name": "ROI set 1",
-                "url": "https://s3.amazonaws.com/igv.org.test/data/roi/roi_bed_1.bed",
+                "url": "https://raw.githubusercontent.com/igvteam/igv-data/refs/heads/main/data/test/roi/roi_bed_1.bed",
                 "indexed": False,
                 "color": "rgba(94,255,1,0.25)"
             }
@@ -128,7 +128,7 @@ the file, obtainable through the JupyterLab UI, as the URL for igv.
 ### Tracks
 
 To load a track, pass a track configuration object to ```igv_browser.load_track()```. Track configuration
-objects are described in the [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Tracks-2.0), however
+objects are described in the [igv.js documentation](https://igv.org/doc/igvjs), however
 see the note on _URLs and paths_ above. The configuration object will be converted to JSON and passed to the igv.js browser instance.
 
 Data for the track can be loaded by URL, file path, or passed directly as an array of JSON objects.
@@ -199,8 +199,8 @@ Remote file - Jupyter.
 igv_browser.load_track(
     {
         "name": "BAM",
-        "url": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam",
-        "indexURL": "https://s3.amazonaws.com/igv.org.demo/gstt1_sample.bam.bai",
+        "url": "https://github.com/igvteam/igv-notebook/raw/refs/heads/main/examples/data/gstt1_sample.bam",
+        "indexURL": "https://github.com/igvteam/igv-notebook/raw/refs/heads/main/examples/data/gstt1_sample.bam.bai",
         "format": "bam",
         "type": "alignment"
     })
@@ -221,7 +221,7 @@ To load a track
 igv_browser.load_track(track_config)
 ```
 
-See example track configurations above.   Also [igv.js  wiki](https://github.com/igvteam/igv.js/wiki/Tracks-2.0)
+See example track configurations above.   Also [igv.js  documentation](https://igv.org/doc/igvjs/)
 
 
 Example:
@@ -260,8 +260,8 @@ igv_browser.search('chr1:3000-4000')
 ```
 
 Jump to a specific gene. This uses the IGV search web service, which currently supports a limited number of 
-[genomes](https://s3.amazonaws.com/igv.org.genomes/genomes.json).  To extend or customize the search, load a non-indexed annotation
-track with the "searchable" property set to true (see [igv.js documentation](https://github.com/igvteam/igv.js/wiki/Annotation-Track#configuration-options)).
+[genomes](https://igv.org.genomes/genomes.json).  To extend or customize the search, load a non-indexed annotation
+track with the "searchable" property set to true (see [igv.js documentation](https://igv.org/doc/igvjs/#tracks/Annotation-Track/).
 
 
 ```python
