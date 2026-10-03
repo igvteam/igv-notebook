@@ -1,4 +1,4 @@
-/# igv.js notebook module
+# igv.js notebook module
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/igvteam/igv-notebook/main?filepath=examples)   _**Jupyter Notebook**_
 
